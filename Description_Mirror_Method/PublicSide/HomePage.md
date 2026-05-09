@@ -19,6 +19,6 @@ Intro: The home page consists of multiple sections.
 
 8. Absence and Attendance: This section shows only the most recent day. Clicking the "Show all" button redirects to the "AbsenceAndAttendencePage" page (all details are in the AbsenceAndAttendencePage file). This section reads data automatically from the database set by teachers.
 
-9. Contact: Contains contact info like WhatsApp, phone, and email. Add a modern layout and a short description that suits the project.
+9. Contact: Contains contact info like WhatsApp, phone, email and button redirect to contact page, That contains Picture for the masjid and Iframe for masjid location (googl maps) as main section in this page and left for basic contact like whatsapp, phone and email. Add a modern layout and a short description that suits the project.
 
 10. Footer: This section contains basic details, social links, and contact details like WhatsApp, phone, and email.
