@@ -1,33 +1,29 @@
 #!/bin/bash
-set -e
 
-# Start MongoDB in background
+# Kill any existing processes
+pkill -f "node server/index.js" 2>/dev/null
+pkill mongod 2>/dev/null
+sleep 1
+
+# Start MongoDB
 mkdir -p /tmp/mongodb-data
-mongod --dbpath /tmp/mongodb-data --logpath /tmp/mongodb.log --bind_ip 127.0.0.1 &
-MONGOD_PID=$!
-
-# Wait for MongoDB to be ready
+mongod --dbpath /tmp/mongodb-data --logpath /tmp/mongodb.log --bind_ip 127.0.0.1 --fork
 echo "Waiting for MongoDB..."
-for i in $(seq 1 20); do
-  if mongod --dbpath /tmp/mongodb-data --logpath /tmp/mongodb.log 2>&1 | grep -q "already in use" 2>/dev/null || \
-     nc -z 127.0.0.1 27017 2>/dev/null; then
-    break
-  fi
-  sleep 0.5
-done
-sleep 2
-
-# Start Node.js backend
-echo "Starting backend..."
-node server/index.js &
-NODE_PID=$!
-
-# Wait for Node.js to be ready
 sleep 3
 
-# Start Vite frontend on port 5000
-echo "Starting frontend..."
-cd client && npm run dev
+# Start backend with auto-restart loop in background
+(
+  while true; do
+    echo "Starting backend server..."
+    node server/index.js
+    echo "Backend crashed, restarting in 2 seconds..."
+    sleep 2
+  done
+) &
 
-# If frontend exits, kill backend and mongodb
-kill $NODE_PID $MONGOD_PID 2>/dev/null
+# Wait for backend to be ready
+sleep 4
+echo "Starting frontend..."
+
+# Start Vite frontend (this is the main process)
+cd client && npm run dev

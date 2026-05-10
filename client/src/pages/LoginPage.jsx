@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 export default function LoginPage() {
-  const [form, setForm] = useState({ email: '', password: '' });
+  const [form, setForm] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
@@ -14,10 +14,10 @@ export default function LoginPage() {
     setLoading(true);
     setError('');
     try {
-      const user = await login(form.email, form.password);
+      const user = await login(form.username, form.password);
       navigate(user.role === 'admin' ? '/admin' : '/teacher');
     } catch (err) {
-      setError(err.response?.data?.message || 'حدث خطأ في تسجيل الدخول');
+      setError(err.response?.data?.message || 'حدث خطأ في تسجيل الدخول، تأكد من البيانات');
     } finally {
       setLoading(false);
     }
@@ -43,15 +43,15 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">البريد الإلكتروني</label>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">اسم المستخدم</label>
             <div className="relative">
-              <i className="fas fa-envelope absolute right-3 top-3 text-gray-400"></i>
+              <i className="fas fa-user absolute right-3 top-3 text-gray-400"></i>
               <input
-                type="email"
-                value={form.email}
-                onChange={e => setForm({...form, email: e.target.value})}
+                type="text"
+                value={form.username}
+                onChange={e => setForm({...form, username: e.target.value})}
                 className="w-full border border-gray-300 rounded-lg pr-10 pl-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-500 text-right"
-                placeholder="admin@masjidy.com"
+                placeholder="admin"
                 required
               />
             </div>
@@ -80,13 +80,17 @@ export default function LoginPage() {
         </form>
 
         <div className="mt-6 p-4 bg-gray-50 rounded-lg text-sm text-gray-600">
-          <p className="font-semibold mb-1"><i className="fas fa-info-circle text-primary-600 ml-1"></i>بيانات المدير الافتراضية:</p>
-          <p>البريد: admin@masjidy.com</p>
-          <p>كلمة المرور: admin123</p>
+          <p className="font-semibold mb-2"><i className="fas fa-info-circle text-primary-600 ml-1"></i>بيانات المدير الافتراضية:</p>
+          <p>اسم المستخدم: <span className="font-bold text-primary-700">admin</span></p>
+          <p>كلمة المرور: <span className="font-bold text-primary-700">admin123</span></p>
           <button
-            onClick={async () => { await fetch('/api/auth/seed-admin', { method: 'POST' }); }}
-            className="mt-2 text-primary-600 underline text-xs"
+            onClick={async () => {
+              await fetch('/api/auth/seed-admin', { method: 'POST' });
+              alert('تم إنشاء حساب المدير بنجاح');
+            }}
+            className="mt-3 w-full bg-primary-50 border border-primary-200 text-primary-700 py-2 rounded-lg text-xs font-semibold hover:bg-primary-100 transition-colors"
           >
+            <i className="fas fa-user-shield ml-1"></i>
             إنشاء حساب المدير (أول مرة فقط)
           </button>
         </div>
