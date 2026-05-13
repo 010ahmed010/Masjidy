@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 export default function LoginPage() {
@@ -75,24 +75,21 @@ export default function LoginPage() {
             disabled={loading}
             className="w-full bg-primary-700 text-white py-3 rounded-lg font-bold text-lg hover:bg-primary-800 transition-colors disabled:opacity-60"
           >
-            {loading ? <><i className="fas fa-spinner fa-spin ml-2"></i>جاري الدخول...</> : <><i className="fas fa-sign-in-alt ml-2"></i>دخول</>}
+            {loading
+              ? <><i className="fas fa-spinner fa-spin ml-2"></i>جاري الدخول...</>
+              : <><i className="fas fa-sign-in-alt ml-2"></i>دخول</>
+            }
           </button>
         </form>
 
-        <div className="mt-6 p-4 bg-gray-50 rounded-lg text-sm text-gray-600">
-          <p className="font-semibold mb-2"><i className="fas fa-info-circle text-primary-600 ml-1"></i>بيانات المدير الافتراضية:</p>
-          <p>اسم المستخدم: <span className="font-bold text-primary-700">admin</span></p>
-          <p>كلمة المرور: <span className="font-bold text-primary-700">admin123</span></p>
-          <button
-            onClick={async () => {
-              await fetch('/api/auth/seed-admin', { method: 'POST' });
-              alert('تم إنشاء حساب المدير بنجاح');
-            }}
-            className="mt-3 w-full bg-primary-50 border border-primary-200 text-primary-700 py-2 rounded-lg text-xs font-semibold hover:bg-primary-100 transition-colors"
+        <div className="mt-6">
+          <Link
+            to="/"
+            className="flex items-center justify-center gap-2 w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-lg font-semibold transition-colors"
           >
-            <i className="fas fa-user-shield ml-1"></i>
-            إنشاء حساب المدير (أول مرة فقط)
-          </button>
+            <i className="fas fa-home ml-1"></i>
+            العودة إلى الصفحة الرئيسية
+          </Link>
         </div>
       </div>
     </div>

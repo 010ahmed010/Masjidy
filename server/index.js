@@ -38,10 +38,18 @@ app.use('/api/lessons', lessonRoutes);
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/masjidy';
 const PORT = process.env.PORT || 8000;
 
-const server = app.listen(PORT, 'localhost', () => {
-  console.log(`Server running on port ${PORT}`);
-});
+mongoose.connect(MONGO_URI, { serverSelectionTimeoutMS: 15000 })
+  .then(() => {
+    console.log('Connected to MongoDB');
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  })
+  .catch(err => {
+    console.error('MongoDB connection error:', err.message);
+    process.exit(1);
+  });
 
-mongoose.connect(MONGO_URI, { serverSelectionTimeoutMS: 10000 })
-  .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.error('MongoDB connection error:', err.message));
+process.on('unhandledRejection', (err) => {
+  console.error('Unhandled rejection:', err.message);
+});
