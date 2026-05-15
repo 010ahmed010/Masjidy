@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 
 export default function LoginPage() {
   const [form, setForm] = useState({ username: '', password: '' });
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
@@ -51,25 +52,35 @@ export default function LoginPage() {
                 value={form.username}
                 onChange={e => setForm({...form, username: e.target.value})}
                 className="w-full border border-gray-300 rounded-lg pr-10 pl-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-500 text-right"
-                placeholder="admin"
+                placeholder="أدخل اسم المستخدم"
                 required
               />
             </div>
           </div>
+
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">كلمة المرور</label>
             <div className="relative">
               <i className="fas fa-lock absolute right-3 top-3 text-gray-400"></i>
               <input
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 value={form.password}
                 onChange={e => setForm({...form, password: e.target.value})}
-                className="w-full border border-gray-300 rounded-lg pr-10 pl-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-500 text-right"
-                placeholder="••••••••"
+                className="w-full border border-gray-300 rounded-lg pr-10 pl-10 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-500 text-right"
+                placeholder="أدخل كلمة المرور"
                 required
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute left-3 top-3 text-gray-400 hover:text-primary-600 transition-colors"
+                tabIndex={-1}
+              >
+                <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+              </button>
             </div>
           </div>
+
           <button
             type="submit"
             disabled={loading}
@@ -82,7 +93,7 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <div className="mt-6">
+        <div className="mt-4">
           <Link
             to="/"
             className="flex items-center justify-center gap-2 w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-lg font-semibold transition-colors"
