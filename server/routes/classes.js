@@ -24,7 +24,7 @@ router.post('/', authMiddleware, adminOnly, async (req, res) => {
 
 router.put('/:id', authMiddleware, adminOnly, async (req, res) => {
   try {
-    const cls = await Class.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const cls = await Class.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true, runValidators: true });
     res.json(cls);
   } catch (err) { res.status(500).json({ message: err.message }); }
 });

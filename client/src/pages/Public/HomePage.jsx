@@ -102,32 +102,48 @@ export default function HomePage() {
             <h2 className="text-4xl font-bold text-primary-900 dark:text-gray-100 mt-2">الدورات المتاحة</h2>
             <div className="w-16 h-1 bg-gold-500 mx-auto mt-3"></div>
           </div>
-          {classes.length === 0 ? (
-            <div className="text-center py-12 text-gray-400 dark:text-gray-500">
-              <i className="fas fa-book-open text-5xl mb-3"></i>
-              <p>لم تتم إضافة دورات بعد</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {classes.map(cls => (
-                <div key={cls._id} className="bg-white dark:bg-[#1a2d1e] rounded-2xl shadow-md dark:shadow-black/30 overflow-hidden card-hover dark:border dark:border-primary-900/40">
-                  <div className="h-44 bg-gradient-to-br from-primary-600 to-primary-800 flex items-center justify-center">
-                    {cls.courseImage ? (
-                      <img src={cls.courseImage} alt={cls.name} className="w-full h-full object-cover" />
-                    ) : (
-                      <i className="fas fa-book-quran text-white text-6xl opacity-60"></i>
-                    )}
+          {(() => {
+            const courseCards = [];
+            classes.forEach(cls => {
+              const courses = cls.courses && cls.courses.length > 0
+                ? cls.courses
+                : cls.courseName ? [{ name: cls.courseName, image: cls.courseImage || '' }] : [];
+              if (courses.length === 0) {
+                courseCards.push({ key: cls._id, courseName: cls.name, courseImage: '', className: cls.name, teacherName: cls.teacher?.name, description: cls.description });
+              } else {
+                courses.forEach((course, i) => {
+                  courseCards.push({ key: `${cls._id}-${i}`, courseName: course.name, courseImage: course.image || '', className: cls.name, teacherName: cls.teacher?.name, description: cls.description });
+                });
+              }
+            });
+            if (courseCards.length === 0) return (
+              <div className="text-center py-12 text-gray-400 dark:text-gray-500">
+                <i className="fas fa-book-open text-5xl mb-3"></i>
+                <p>لم تتم إضافة دورات بعد</p>
+              </div>
+            );
+            return (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {courseCards.map(card => (
+                  <div key={card.key} className="bg-white dark:bg-[#1a2d1e] rounded-2xl shadow-md dark:shadow-black/30 overflow-hidden card-hover dark:border dark:border-primary-900/40">
+                    <div className="h-44 bg-gradient-to-br from-primary-600 to-primary-800 flex items-center justify-center">
+                      {card.courseImage ? (
+                        <img src={card.courseImage} alt={card.courseName} className="w-full h-full object-cover" />
+                      ) : (
+                        <i className="fas fa-book-quran text-white text-6xl opacity-60"></i>
+                      )}
+                    </div>
+                    <div className="p-5">
+                      <h3 className="font-bold text-xl text-primary-800 dark:text-gray-100 mb-1">{card.courseName}</h3>
+                      <p className="text-gold-600 dark:text-gold-400 text-sm font-semibold mb-2">{card.className}</p>
+                      {card.description && <p className="text-gray-600 dark:text-gray-300 text-sm">{card.description}</p>}
+                      {card.teacherName && <p className="text-xs text-gray-400 dark:text-gray-500 mt-3"><i className="fas fa-user ml-1"></i>المعلم: {card.teacherName}</p>}
+                    </div>
                   </div>
-                  <div className="p-5">
-                    <h3 className="font-bold text-xl text-primary-800 dark:text-gray-100 mb-1">{cls.name}</h3>
-                    {cls.courseName && <p className="text-gold-600 dark:text-gold-400 text-sm font-semibold mb-2">{cls.courseName}</p>}
-                    {cls.description && <p className="text-gray-600 dark:text-gray-300 text-sm">{cls.description}</p>}
-                    {cls.teacher && <p className="text-xs text-gray-400 dark:text-gray-500 mt-3"><i className="fas fa-user ml-1"></i>المعلم: {cls.teacher.name}</p>}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+                ))}
+              </div>
+            );
+          })()}
         </div>
       </section>
 
