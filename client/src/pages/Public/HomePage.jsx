@@ -160,98 +160,91 @@ export default function HomePage() {
 
       {/* Occasions */}
       {occasions.length > 0 && (
-        <section className="py-20 bg-gradient-to-b from-primary-950 to-primary-900 relative overflow-hidden">
-          {/* Background decorative elements */}
-          <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
-            <i className="fas fa-mosque absolute text-white/5 text-[300px] -top-10 -right-16 rotate-6"></i>
-            <i className="fas fa-star-and-crescent absolute text-white/5 text-[200px] bottom-10 -left-10 -rotate-12"></i>
-            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold-500/40 to-transparent"></div>
-            <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold-500/40 to-transparent"></div>
-          </div>
-
-          <div className="relative z-10">
-            {/* Section header */}
-            <div className="text-center mb-14 px-4">
+        <section className="bg-primary-950" dir="rtl">
+          {/* Section header — dark so white text is readable */}
+          <div className="py-16 px-4 text-center relative overflow-hidden">
+            <div className="absolute inset-0 pointer-events-none">
+              <i className="fas fa-mosque absolute text-white/[0.03] text-[260px] -top-8 right-1/2 translate-x-1/2"></i>
+            </div>
+            <div className="relative z-10">
               <div className="inline-flex items-center gap-3 mb-4">
-                <div className="w-8 h-px bg-gold-500"></div>
-                <i className="fas fa-star-and-crescent text-gold-400 text-xl"></i>
-                <div className="w-8 h-px bg-gold-500"></div>
+                <div className="w-10 h-px bg-gold-500"></div>
+                <i className="fas fa-star-and-crescent text-gold-400 text-2xl"></i>
+                <div className="w-10 h-px bg-gold-500"></div>
               </div>
-              <span className="block text-gold-400 font-semibold text-sm tracking-widest uppercase mb-2">مناسباتنا</span>
+              <span className="block text-gold-400 font-semibold text-sm tracking-widest mb-3">مناسباتنا</span>
               <h2 className="text-5xl font-bold text-white mb-4">المناسبات الإسلامية</h2>
+              <div className="w-20 h-1 bg-gradient-to-r from-gold-600 via-gold-400 to-gold-600 mx-auto mb-4 rounded-full"></div>
               <p className="text-primary-300 text-lg max-w-xl mx-auto">نحتفي بالمناسبات الإسلامية ونشاركها مع طلابنا وأسرهم الكرام</p>
             </div>
+          </div>
 
-            {/* Full-width occasions */}
-            <div className="space-y-0">
-              {occasions.map((occ, idx) => (
-                <div
-                  key={occ._id}
-                  className="relative w-full overflow-hidden group"
-                  style={{ minHeight: '340px' }}
-                >
-                  {/* Background image or gradient */}
-                  {occ.image ? (
-                    <>
-                      <img
-                        src={occ.image}
-                        alt={occ.title}
-                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      />
-                      <div className={`absolute inset-0 ${idx % 2 === 0 ? 'bg-gradient-to-l' : 'bg-gradient-to-r'} from-primary-950/95 via-primary-900/80 to-transparent`}></div>
-                    </>
-                  ) : (
-                    <div className={`absolute inset-0 ${idx % 2 === 0
-                      ? 'bg-gradient-to-l from-primary-800 via-primary-700 to-primary-600'
-                      : 'bg-gradient-to-r from-primary-800 via-primary-700 to-primary-600'
-                    }`}>
-                      <div className="absolute inset-0 opacity-10"
-                        style={{backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,.04) 20px, rgba(255,255,255,.04) 40px)'}}
-                      ></div>
-                    </div>
-                  )}
-
-                  {/* Decorative crescent */}
-                  <div className={`absolute top-1/2 -translate-y-1/2 ${idx % 2 === 0 ? 'left-10' : 'right-10'} text-white/10 text-[180px] leading-none pointer-events-none`}>
-                    <i className="fas fa-star-and-crescent"></i>
+          {/* Occasions banners — full width, stacked with gap */}
+          <div className="flex flex-col gap-4 pb-16 px-4 md:px-10 max-w-7xl mx-auto">
+            {occasions.map((occ) => (
+              <div
+                key={occ._id}
+                className="relative w-full rounded-2xl overflow-hidden group"
+                style={{ minHeight: '320px' }}
+              >
+                {/* Background */}
+                {occ.image ? (
+                  <>
+                    <img
+                      src={occ.image}
+                      alt={occ.title}
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    {/* Strong right-side gradient overlay so text is always readable */}
+                    <div className="absolute inset-0 bg-gradient-to-l from-black/90 via-black/60 to-black/20"></div>
+                  </>
+                ) : (
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary-700 via-primary-800 to-primary-900">
+                    <div className="absolute inset-0"
+                      style={{backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(255,255,255,0.04) 0%, transparent 60%)'}}
+                    ></div>
                   </div>
+                )}
 
-                  {/* Gold top border */}
-                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold-500 to-transparent"></div>
-
-                  {/* Content */}
-                  <div className={`relative z-10 flex items-center min-h-[340px] px-8 md:px-20 ${idx % 2 === 0 ? '' : 'justify-end'}`}>
-                    <div className={`max-w-xl ${idx % 2 !== 0 ? 'text-left' : ''}`} dir="rtl">
-                      {/* Occasion number badge */}
-                      <div className="inline-flex items-center gap-2 bg-gold-500/20 border border-gold-500/40 text-gold-300 text-xs font-bold px-4 py-1.5 rounded-full mb-5 tracking-wider">
-                        <i className="fas fa-star-and-crescent text-gold-400"></i>
-                        <span>مناسبة إسلامية</span>
-                      </div>
-
-                      <h3 className="text-4xl md:text-5xl font-bold text-white mb-5 leading-tight drop-shadow-lg">
-                        {occ.title}
-                      </h3>
-
-                      {occ.description && (
-                        <p className="text-primary-200 text-lg leading-relaxed max-w-lg border-r-4 border-gold-500 pr-4">
-                          {occ.description}
-                        </p>
-                      )}
-
-                      {/* Gold divider */}
-                      <div className="flex items-center gap-3 mt-6">
-                        <div className="w-12 h-0.5 bg-gold-500"></div>
-                        <i className="fas fa-mosque text-gold-500/60 text-sm"></i>
-                        <div className="w-12 h-0.5 bg-gold-500"></div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Bottom separator */}
-                  <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold-500/30 to-transparent"></div>
+                {/* Decorative crescent — left side */}
+                <div className="absolute left-6 top-1/2 -translate-y-1/2 text-white/10 text-[160px] leading-none pointer-events-none select-none">
+                  <i className="fas fa-star-and-crescent"></i>
                 </div>
-              ))}
-            </div>
+
+                {/* Gold left border accent */}
+                <div className="absolute top-6 bottom-6 right-0 w-1 bg-gradient-to-b from-transparent via-gold-500 to-transparent rounded-full"></div>
+
+                {/* Content — always on the right side (RTL) */}
+                <div className="relative z-10 flex items-center min-h-[320px] pr-10 pl-6 md:pr-16">
+                  <div className="max-w-lg w-full">
+                    {/* Badge */}
+                    <div className="inline-flex items-center gap-2 bg-gold-500/20 border border-gold-500/50 text-gold-300 text-xs font-bold px-4 py-1.5 rounded-full mb-5">
+                      <i className="fas fa-star-and-crescent text-gold-400 text-xs"></i>
+                      <span>مناسبة إسلامية</span>
+                    </div>
+
+                    {/* Title */}
+                    <h3 className="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight" style={{textShadow: '0 2px 20px rgba(0,0,0,0.8)'}}>
+                      {occ.title}
+                    </h3>
+
+                    {/* Description */}
+                    {occ.description && (
+                      <p className="text-white/80 text-base md:text-lg leading-relaxed border-r-4 border-gold-500 pr-4 max-w-md" style={{textShadow: '0 1px 8px rgba(0,0,0,0.9)'}}>
+                        {occ.description}
+                      </p>
+                    )}
+
+                    {/* Bottom gold line */}
+                    <div className="flex items-center gap-2 mt-6">
+                      <div className="w-8 h-0.5 bg-gold-500"></div>
+                      <div className="w-2 h-2 rounded-full bg-gold-400"></div>
+                      <div className="w-16 h-0.5 bg-gold-500/50"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </section>
       )}

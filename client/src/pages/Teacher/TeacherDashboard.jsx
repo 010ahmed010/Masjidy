@@ -26,12 +26,20 @@ export default function TeacherDashboard() {
   return (
     <div className="flex h-screen bg-gray-100 overflow-hidden" dir="rtl">
       <aside className={`${sidebarOpen ? 'w-64' : 'w-16'} bg-primary-800 text-white flex flex-col transition-all duration-300 flex-shrink-0`}>
-        <div className="p-4 flex items-center gap-3 border-b border-primary-700">
-          <div className="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+        <Link to="/" className="p-4 flex items-center gap-3 border-b border-primary-700 hover:bg-primary-700 transition-colors group" title="العودة للموقع">
+          <div className="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 group-hover:bg-white/30 transition-colors">
             <i className="fas fa-mosque text-white text-sm"></i>
           </div>
-          {sidebarOpen && <span className="font-bold text-lg truncate">مسجدي</span>}
-        </div>
+          {sidebarOpen && (
+            <div className="overflow-hidden">
+              <span className="font-bold text-lg block truncate leading-tight">مسجدي</span>
+              <span className="text-primary-300 text-xs flex items-center gap-1">
+                <i className="fas fa-arrow-left text-[10px]"></i>
+                العودة للموقع
+              </span>
+            </div>
+          )}
+        </Link>
 
         <nav className="flex-1 py-4 overflow-y-auto">
           {navItems.map(item => {
@@ -78,9 +86,9 @@ export default function TeacherDashboard() {
             <i className="fas fa-chalkboard-teacher text-primary-600"></i>
             <span>لوحة تحكم المعلم</span>
           </div>
-          <Link to="/" className="text-sm text-primary-600 hover:text-primary-800">
-            <i className="fas fa-home ml-1"></i>الموقع
-          </Link>
+          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="text-gray-400 hover:text-gray-600 text-sm">
+            <i className={`fas ${sidebarOpen ? 'fa-chevron-right' : 'fa-chevron-left'}`}></i>
+          </button>
         </header>
 
         <main className="flex-1 overflow-y-auto p-6">
