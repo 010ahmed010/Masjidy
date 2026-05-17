@@ -3,8 +3,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
-import logoLight from '../../assets/logo/MasjidiLogo.png';
-import logoDark from '../../assets/logo/MasjidiDarkModeLogo.png';
+import logoLight from '../../assets/logo/MasjidiDLightMode.png';
+import logoDark from '../../assets/logo/MasjidiDarkMode.png';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -49,15 +49,12 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
 
-          <Link to="/" className="flex items-center gap-2">
+          <Link to="/" className="flex items-center">
             <img
               src={dark ? logoDark : logoLight}
               alt="مسجدي"
-              className="h-11 w-auto object-contain"
+              className="h-12 w-auto object-contain"
             />
-            <span className="text-2xl font-extrabold bg-gradient-to-b from-primary-700 to-primary-900 dark:from-primary-400 dark:to-primary-200 bg-clip-text text-transparent tracking-wide" style={{ fontFamily: "'Amiri', 'Cairo', serif" }}>
-              {settings.siteName || 'مسجدي'}
-            </span>
           </Link>
 
           <nav className="hidden md:flex items-center gap-6">
