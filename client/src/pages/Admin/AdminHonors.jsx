@@ -18,7 +18,7 @@ export default function AdminHonors() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
-        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100"><i className="fas fa-award text-gold-500 ml-2"></i>إدارة لوحة الشرف</h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100"><i className="fas fa-award text-gold-500 ml-2"></i>إدارة لوحة الشرف</h1>
       </div>
 
       <div className="flex gap-2 mb-6 flex-wrap">

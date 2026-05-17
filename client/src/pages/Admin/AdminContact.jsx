@@ -31,7 +31,7 @@ export default function AdminContact() {
   return (
     <div className="flex flex-col items-center">
       <div className="w-full max-w-lg">
-        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6"><i className="fas fa-address-book text-primary-600 dark:text-primary-400 ml-2"></i>إعدادات التواصل</h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4 sm:mb-6"><i className="fas fa-address-book text-primary-600 dark:text-primary-400 ml-2"></i>إعدادات التواصل</h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="bg-white dark:bg-[#1a2d1e] rounded-2xl shadow-md dark:shadow-black/30 p-6 space-y-4 dark:border dark:border-primary-900/40">

@@ -14,8 +14,8 @@ export default function ContactPage() {
     <div className="min-h-screen flex flex-col transition-colors duration-300">
       <Header />
       <main className="flex-1">
-        <div className="gradient-islamic islamic-pattern py-16 text-center text-white">
-          <h1 className="text-4xl font-bold mb-3">تواصل معنا</h1>
+        <div className="gradient-islamic islamic-pattern py-12 sm:py-16 text-center text-white px-4">
+          <h1 className="text-2xl sm:text-4xl font-bold mb-3">تواصل معنا</h1>
           <p className="text-primary-200">نسعد بتواصلكم معنا في أي وقت</p>
         </div>
 

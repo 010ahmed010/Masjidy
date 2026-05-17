@@ -39,7 +39,7 @@ export default function AdminOccasions() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
-        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100"><i className="fas fa-star-and-crescent text-primary-600 dark:text-primary-400 ml-2"></i>إدارة المناسبات</h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100"><i className="fas fa-star-and-crescent text-primary-600 dark:text-primary-400 ml-2"></i>إدارة المناسبات</h1>
         <button onClick={openAdd} className="bg-primary-700 text-white px-5 py-2.5 rounded-xl font-semibold hover:bg-primary-800 text-sm"><i className="fas fa-plus ml-1"></i>إضافة مناسبة</button>
       </div>
 

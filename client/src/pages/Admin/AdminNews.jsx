@@ -38,25 +38,27 @@ export default function AdminNews() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
-        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100"><i className="fas fa-newspaper text-primary-600 dark:text-primary-400 ml-2"></i>إدارة الأخبار والإعلانات</h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100"><i className="fas fa-newspaper text-primary-600 dark:text-primary-400 ml-2"></i>إدارة الأخبار والإعلانات</h1>
         <button onClick={openAdd} className="bg-primary-700 text-white px-5 py-2.5 rounded-xl font-semibold hover:bg-primary-800 text-sm"><i className="fas fa-plus ml-1"></i>إضافة</button>
       </div>
 
       <div className="space-y-3">
         {news.map(n => (
-          <div key={n._id} className="bg-white dark:bg-[#1a2d1e] rounded-2xl shadow-md dark:shadow-black/30 p-5 flex items-start gap-4 card-hover dark:border dark:border-primary-900/40">
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-2">
-                <span className={`text-xs px-2 py-1 rounded-full font-bold ${typeColor(n.type)}`}>{typeLabel(n.type)}</span>
-                <span className={`text-xs px-2 py-1 rounded-full ${n.published ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400'}`}>{n.published ? 'منشور' : 'مخفي'}</span>
-                <span className="text-xs text-gray-400 dark:text-gray-500">{new Date(n.createdAt).toLocaleDateString('ar-SA')}</span>
+          <div key={n._id} className="bg-white dark:bg-[#1a2d1e] rounded-2xl shadow-md dark:shadow-black/30 p-4 sm:p-5 card-hover dark:border dark:border-primary-900/40">
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center flex-wrap gap-2 mb-2">
+                  <span className={`text-xs px-2 py-1 rounded-full font-bold ${typeColor(n.type)}`}>{typeLabel(n.type)}</span>
+                  <span className={`text-xs px-2 py-1 rounded-full ${n.published ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400'}`}>{n.published ? 'منشور' : 'مخفي'}</span>
+                  <span className="text-xs text-gray-400 dark:text-gray-500">{new Date(n.createdAt).toLocaleDateString('ar-SA')}</span>
+                </div>
+                <h3 className="font-bold text-gray-800 dark:text-gray-100 mb-1 truncate">{n.title}</h3>
+                {n.content && <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">{n.content}</p>}
               </div>
-              <h3 className="font-bold text-gray-800 dark:text-gray-100 mb-1">{n.title}</h3>
-              {n.content && <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">{n.content}</p>}
-            </div>
-            <div className="flex gap-2 flex-shrink-0">
-              <button onClick={() => openEdit(n)} className="text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 rounded-lg px-3 py-1.5 text-xs font-semibold hover:bg-blue-50 dark:hover:bg-blue-900/20"><i className="fas fa-edit ml-1"></i>تعديل</button>
-              <button onClick={() => handleDelete(n._id)} className="text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800 rounded-lg px-3 py-1.5 text-xs font-semibold hover:bg-red-50 dark:hover:bg-red-900/20"><i className="fas fa-trash"></i></button>
+              <div className="flex gap-2 flex-shrink-0">
+                <button onClick={() => openEdit(n)} className="text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 rounded-lg px-2 sm:px-3 py-1.5 text-xs font-semibold hover:bg-blue-50 dark:hover:bg-blue-900/20"><i className="fas fa-edit sm:ml-1"></i><span className="hidden sm:inline">تعديل</span></button>
+                <button onClick={() => handleDelete(n._id)} className="text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800 rounded-lg px-2 sm:px-3 py-1.5 text-xs font-semibold hover:bg-red-50 dark:hover:bg-red-900/20"><i className="fas fa-trash"></i></button>
+              </div>
             </div>
           </div>
         ))}
