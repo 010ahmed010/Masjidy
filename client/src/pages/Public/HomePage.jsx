@@ -133,10 +133,10 @@ export default function HomePage() {
                         <i className="fas fa-book-quran text-white text-6xl opacity-60"></i>
                       )}
                     </div>
-                    <div className="p-5 flex flex-col h-full">
+                    <div className="p-5">
                       <h3 className="font-bold text-xl text-primary-800 dark:text-gray-100 mb-2">{card.courseName}</h3>
                       {card.description && <p className="text-gray-600 dark:text-gray-300 text-sm mb-3">{card.description}</p>}
-                      <div className="mt-auto pt-3 border-t border-gray-100 dark:border-primary-900/40 space-y-1">
+                      <div className="pt-3 mt-3 border-t border-gray-100 dark:border-primary-900/40 space-y-1">
                         <p className="text-sm font-bold text-primary-700 dark:text-primary-300"><i className="fas fa-school ml-1"></i>الصف: {card.className}</p>
                         {card.teacherName && <p className="text-xs text-gray-400 dark:text-gray-500"><i className="fas fa-user ml-1"></i>المعلم: {card.teacherName}</p>}
                       </div>
