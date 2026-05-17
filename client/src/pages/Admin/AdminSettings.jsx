@@ -18,8 +18,7 @@ export default function AdminSettings() {
   const labelCls = "block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1";
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="w-full max-w-lg">
+    <div>
         <h1 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4 sm:mb-6"><i className="fas fa-cog text-primary-600 dark:text-primary-400 ml-2"></i>الإعدادات العامة</h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -69,7 +68,6 @@ export default function AdminSettings() {
             {loading ? <><i className="fas fa-spinner fa-spin ml-2"></i>جاري الحفظ...</> : <><i className="fas fa-save ml-2"></i>حفظ الإعدادات</>}
           </button>
         </form>
-      </div>
     </div>
   );
 }
