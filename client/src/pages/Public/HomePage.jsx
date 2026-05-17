@@ -97,7 +97,7 @@ export default function HomePage() {
                 className="w-full h-auto block"
               />
               <div className="absolute inset-0 flex flex-col items-center justify-end pb-8 px-6">
-                <p className={`text-lg sm:text-2xl font-bold text-center ${dark ? 'text-gold-300' : 'text-primary-800'}`}>﴿ خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْآنَ وَعَلَّمَهُ ﴾</p>
+                <p className={`text-lg sm:text-2xl font-bold text-center ${dark ? 'text-gold-400' : 'text-primary-800'}`}>﴿ خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْآنَ وَعَلَّمَهُ ﴾</p>
               </div>
             </div>
           </div>
