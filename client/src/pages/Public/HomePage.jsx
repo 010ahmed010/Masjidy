@@ -221,8 +221,8 @@ export default function HomePage() {
                   </div>
                 )}
 
-                <div className="absolute left-6 top-1/2 -translate-y-1/2 text-white/10 text-[160px] leading-none pointer-events-none select-none">
-                  <i className="fas fa-star-and-crescent"></i>
+                <div className="absolute left-6 top-1/2 -translate-y-1/2 pointer-events-none select-none" style={{ opacity: 0.12 }}>
+                  <img src={logoDark} alt="" className="h-24 w-auto object-contain" />
                 </div>
 
                 <div className="absolute top-6 bottom-6 right-0 w-1 bg-gradient-to-b from-transparent via-gold-500 to-transparent rounded-full"></div>
