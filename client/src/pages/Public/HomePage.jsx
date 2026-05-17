@@ -92,14 +92,15 @@ export default function HomePage() {
             </div>
             <div className="relative">
               <div
-                className="rounded-3xl p-8 text-white text-center shadow-2xl overflow-hidden"
+                className="rounded-3xl text-white text-center shadow-2xl overflow-hidden flex flex-col justify-center"
                 style={{
                   backgroundImage: `url(${dark ? bgDark : bgLight})`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
+                  minHeight: '480px',
                 }}
               >
-                <div className="relative z-10 py-8">
+                <div className="relative z-10 px-8 pb-10 pt-72">
                   <p className="text-2xl font-bold text-gold-300 mb-2">﴿ خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْآنَ وَعَلَّمَهُ ﴾</p>
                   <p className="text-white/70 text-sm">صحيح البخاري</p>
                 </div>
