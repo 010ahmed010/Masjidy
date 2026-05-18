@@ -35,6 +35,24 @@ app.use('/api/certificates', certificateRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/lessons', lessonRoutes);
 
+app.get('/api/developer-contact', async (req, res) => {
+  try {
+    const https = require('https');
+    const data = await new Promise((resolve, reject) => {
+      https.get('https://010ahmed010.github.io/api/Amj-contact.json', (response) => {
+        let body = '';
+        response.on('data', chunk => body += chunk);
+        response.on('end', () => {
+          try { resolve(JSON.parse(body)); } catch (e) { reject(e); }
+        });
+      }).on('error', reject);
+    });
+    res.json(data);
+  } catch (err) {
+    res.status(502).json({ error: 'Failed to fetch developer contact' });
+  }
+});
+
 const MONGO_URI = process.env.MONGO_URI;
 const PORT = process.env.PORT || 8000;
 

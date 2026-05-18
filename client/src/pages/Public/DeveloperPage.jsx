@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import Header from '../../components/shared/Header';
 import Footer from '../../components/shared/Footer';
 import amjLogo from '../../assets/DevAssets/AMJ-Logo.png';
@@ -9,8 +8,16 @@ export default function DeveloperPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get('https://010ahmed010.github.io/api/Amj-contact.json')
-      .then(r => setContact(r.data.contactDetails))
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
+  useEffect(() => {
+    fetch('/api/developer-contact')
+      .then(res => {
+        if (!res.ok) throw new Error('Failed');
+        return res.json();
+      })
+      .then(data => setContact(data.contactDetails))
       .catch(() => setContact(null))
       .finally(() => setLoading(false));
   }, []);

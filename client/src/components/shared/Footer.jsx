@@ -66,15 +66,16 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-primary-700 pt-4 flex items-center justify-center gap-3 text-primary-300 text-sm flex-wrap">
-          <p>{settings.footerText || `جميع الحقوق محفوظة © ${new Date().getFullYear()} مسجدي`}</p>
+        <div className="border-t border-primary-700 pt-4 flex items-center justify-between flex-wrap gap-3 text-primary-300 text-sm">
           <Link
             to="/developer"
             title="صفحة المطور"
-            className="flex-shrink-0 opacity-70 hover:opacity-100 transition-opacity"
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/10 hover:border-white/20 transition-all group"
           >
-            <img src={amjButton} alt="AMJ" className="h-7 w-auto object-contain rounded-lg" />
+            <img src={amjButton} alt="AMJ" className="h-5 w-auto object-contain rounded-md flex-shrink-0" />
+            <span className="text-primary-200 group-hover:text-white text-xs font-medium whitespace-nowrap">تم التطوير بواسطة</span>
           </Link>
+          <p className="text-center flex-1">{settings.footerText || `جميع الحقوق محفوظة © ${new Date().getFullYear()} مسجدي`}</p>
         </div>
       </div>
     </footer>
