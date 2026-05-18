@@ -17,6 +17,7 @@ export default function HomePage() {
   const [classes, setClasses] = useState([]);
   const [contact, setContact] = useState({});
   const [latestAttendance, setLatestAttendance] = useState(null);
+  const [lessons, setLessons] = useState([]);
 
   useEffect(() => {
     axios
@@ -42,6 +43,10 @@ export default function HomePage() {
     axios
       .get("/api/attendance/latest")
       .then((r) => setLatestAttendance(r.data))
+      .catch(() => {});
+    axios
+      .get("/api/lessons/public")
+      .then((r) => setLessons(r.data.slice(0, 4)))
       .catch(() => {});
   }, []);
 
@@ -504,6 +509,49 @@ export default function HomePage() {
           )}
         </div>
       </section>
+
+      {/* Lessons Section */}
+      {lessons.length > 0 && (
+        <section className="py-16 bg-white dark:bg-[#0d1a10]">
+          <div className="max-w-6xl mx-auto px-4">
+            <div className="text-center mb-10" dir="rtl">
+              <span className="text-primary-600 dark:text-primary-400 font-semibold text-sm">المناهج الدراسية</span>
+              <h2 className="text-2xl sm:text-4xl font-bold text-primary-900 dark:text-gray-100 mt-2">خطة الدروس الأسبوعية</h2>
+              <div className="w-16 h-1 bg-primary-600 mx-auto mt-3"></div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8" dir="rtl">
+              {lessons.map(lesson => (
+                <div key={lesson._id} className="bg-gray-50 dark:bg-[#1a2d1e] rounded-2xl overflow-hidden shadow-sm dark:shadow-black/20 border border-gray-100 dark:border-primary-900/40">
+                  <div className="px-5 py-3 bg-gradient-to-l from-primary-700 to-primary-900 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <i className="fas fa-chalkboard-teacher text-white/80 text-sm"></i>
+                      <span className="font-bold text-white text-sm">{lesson.teacher?.name}</span>
+                    </div>
+                    <span className="text-xs bg-white/20 text-white px-2.5 py-1 rounded-full">{lesson.class?.name}</span>
+                  </div>
+                  <div className="p-4 space-y-2">
+                    {lesson.days?.filter(d => d.topic || d.course).slice(0, 3).map((d, i) => (
+                      <div key={i} className="flex items-center gap-3">
+                        <span className="text-xs bg-primary-50 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 px-2 py-0.5 rounded font-semibold w-16 text-center flex-shrink-0">{d.day}</span>
+                        <span className="text-xs text-gray-600 dark:text-gray-300 truncate">{d.course && <span className="text-gold-600 dark:text-gold-400 font-semibold ml-1">{d.course} — </span>}{d.topic}</span>
+                      </div>
+                    ))}
+                    {(lesson.days?.filter(d => d.topic || d.course).length || 0) === 0 && (
+                      <p className="text-xs text-gray-400 dark:text-gray-500 text-center py-2">لا توجد تفاصيل</p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="text-center">
+              <Link to="/lessons" className="inline-flex items-center gap-2 bg-primary-700 hover:bg-primary-800 text-white px-7 py-3 rounded-xl font-bold transition-colors text-sm">
+                <i className="fas fa-calendar-week"></i>
+                عرض جميع الخطط الأسبوعية
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Contact Section */}
       <section className="py-16 dark:bg-[#0d1a10]">

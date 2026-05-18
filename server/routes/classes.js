@@ -2,12 +2,19 @@ const express = require('express');
 const router = express.Router();
 const Class = require('../models/Class');
 const User = require('../models/User');
+const Student = require('../models/Student');
 const { authMiddleware, adminOnly } = require('../middleware/auth');
 
 router.get('/', async (req, res) => {
   try {
-    const classes = await Class.find().populate('teacher', 'name email').populate('students', 'name');
-    res.json(classes);
+    const classes = await Class.find().populate('teacher', 'name email');
+    const result = await Promise.all(classes.map(async (cls) => {
+      const students = await Student.find({ assignedClass: cls._id }, 'name _id');
+      const obj = cls.toObject();
+      obj.students = students;
+      return obj;
+    }));
+    res.json(result);
   } catch (err) { res.status(500).json({ message: err.message }); }
 });
 

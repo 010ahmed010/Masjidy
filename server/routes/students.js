@@ -1,17 +1,21 @@
 const express = require('express');
 const router = express.Router();
 const Student = require('../models/Student');
-const { authMiddleware, adminOnly, teacherOnly } = require('../middleware/auth');
+const Class = require('../models/Class');
+const { authMiddleware, adminOnly } = require('../middleware/auth');
 
 router.get('/', authMiddleware, async (req, res) => {
   try {
     const { classId, teacherId, name, status } = req.query;
     const filter = {};
-    if (classId) filter.assignedClass = classId;
+    if (classId) {
+      filter.assignedClass = classId;
+    } else if (req.user.role === 'teacher') {
+      filter.assignedTeacher = req.user.id;
+    }
     if (teacherId) filter.assignedTeacher = teacherId;
     if (name) filter.name = { $regex: name, $options: 'i' };
     if (status) filter.status = status;
-    if (req.user.role === 'teacher') filter.assignedTeacher = req.user.id;
     const students = await Student.find(filter).populate('assignedClass assignedTeacher', 'name');
     res.json(students);
   } catch (err) { res.status(500).json({ message: err.message }); }
@@ -21,19 +25,38 @@ router.post('/', authMiddleware, adminOnly, async (req, res) => {
   try {
     const student = new Student(req.body);
     await student.save();
+    if (req.body.assignedClass) {
+      await Class.findByIdAndUpdate(req.body.assignedClass, { $addToSet: { students: student._id } });
+    }
     res.status(201).json(student);
   } catch (err) { res.status(500).json({ message: err.message }); }
 });
 
 router.put('/:id', authMiddleware, adminOnly, async (req, res) => {
   try {
+    const oldStudent = await Student.findById(req.params.id);
+    const oldClassId = oldStudent?.assignedClass?.toString();
+    const newClassId = req.body.assignedClass?.toString();
+
     const student = await Student.findByIdAndUpdate(req.params.id, req.body, { new: true });
+
+    if (oldClassId && oldClassId !== newClassId) {
+      await Class.findByIdAndUpdate(oldClassId, { $pull: { students: student._id } });
+    }
+    if (newClassId) {
+      await Class.findByIdAndUpdate(newClassId, { $addToSet: { students: student._id } });
+    }
+
     res.json(student);
   } catch (err) { res.status(500).json({ message: err.message }); }
 });
 
 router.delete('/:id', authMiddleware, adminOnly, async (req, res) => {
   try {
+    const student = await Student.findById(req.params.id);
+    if (student?.assignedClass) {
+      await Class.findByIdAndUpdate(student.assignedClass, { $pull: { students: student._id } });
+    }
     await Student.findByIdAndDelete(req.params.id);
     res.json({ message: 'Deleted' });
   } catch (err) { res.status(500).json({ message: err.message }); }
