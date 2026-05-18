@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import Header from '../../components/shared/Header';
-import Footer from '../../components/shared/Footer';
-import axios from 'axios';
-import logoDark from '../../assets/logo/MasjidiDarkMode.png';
-import logoLight from '../../assets/logo/MasjidiDLightMode.png';
-import { useTheme } from '../../context/ThemeContext';
-import bgLight from '../../assets/background/HeorLightMode.png';
-import bgDark from '../../assets/background/HeroDarkMode.png';
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import Header from "../../components/shared/Header";
+import Footer from "../../components/shared/Footer";
+import axios from "axios";
+import logoDark from "../../assets/logo/MasjidiDarkMode.png";
+import logoLight from "../../assets/logo/MasjidiDLightMode.png";
+import { useTheme } from "../../context/ThemeContext";
+import bgLight from "../../assets/background/HeorLightMode.png";
+import bgDark from "../../assets/background/HeroDarkMode.png";
 
 export default function HomePage() {
   const { dark } = useTheme();
@@ -19,12 +19,30 @@ export default function HomePage() {
   const [latestAttendance, setLatestAttendance] = useState(null);
 
   useEffect(() => {
-    axios.get('/api/news').then(r => setNews(r.data)).catch(() => {});
-    axios.get('/api/occasions').then(r => setOccasions(r.data.filter(o => o.active))).catch(() => {});
-    axios.get('/api/honors?status=approved').then(r => setHonors(r.data.slice(0, 6))).catch(() => {});
-    axios.get('/api/classes').then(r => setClasses(r.data.filter(c => c.showOnHomePage))).catch(() => {});
-    axios.get('/api/contact').then(r => setContact(r.data)).catch(() => {});
-    axios.get('/api/attendance/latest').then(r => setLatestAttendance(r.data)).catch(() => {});
+    axios
+      .get("/api/news")
+      .then((r) => setNews(r.data))
+      .catch(() => {});
+    axios
+      .get("/api/occasions")
+      .then((r) => setOccasions(r.data.filter((o) => o.active)))
+      .catch(() => {});
+    axios
+      .get("/api/honors?status=approved")
+      .then((r) => setHonors(r.data.slice(0, 6)))
+      .catch(() => {});
+    axios
+      .get("/api/classes")
+      .then((r) => setClasses(r.data.filter((c) => c.showOnHomePage)))
+      .catch(() => {});
+    axios
+      .get("/api/contact")
+      .then((r) => setContact(r.data))
+      .catch(() => {});
+    axios
+      .get("/api/attendance/latest")
+      .then((r) => setLatestAttendance(r.data))
+      .catch(() => {});
   }, []);
 
   return (
@@ -49,18 +67,29 @@ export default function HomePage() {
           <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold mb-6 leading-tight">
             مرحباً بكم في
             <span className="block mt-4 flex justify-center">
-              <img src={logoDark} alt="مسجدي" className="h-16 sm:h-20 md:h-24 w-auto object-contain mx-auto" />
+              <img
+                src={logoDark}
+                alt="مسجدي"
+                className="h-16 sm:h-20 md:h-24 w-auto object-contain mx-auto"
+              />
             </span>
           </h1>
           <p className="text-base sm:text-xl md:text-2xl text-primary-100 max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed">
-            معهد متخصص في تعليم الأطفال والطلاب القرآن الكريم وعلوم السنة النبوية والعلوم الإسلامية
+            معهد متخصص في تعليم الأطفال والطلاب القرآن الكريم وعلوم السنة
+            النبوية والعلوم الإسلامية
           </p>
           <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center">
-            <a href="#courses" className="bg-gold-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg hover:bg-gold-600 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+            <a
+              href="#courses"
+              className="bg-gold-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg hover:bg-gold-600 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+            >
               <i className="fas fa-graduation-cap ml-2"></i>
               استعرض الدورات
             </a>
-            <Link to="/contact" className="bg-white/20 backdrop-blur text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg hover:bg-white/30 transition-all border border-white/30">
+            <Link
+              to="/contact"
+              className="bg-white/20 backdrop-blur text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg hover:bg-white/30 transition-all border border-white/30"
+            >
               <i className="fas fa-phone ml-2"></i>
               تواصل معنا
             </Link>
@@ -74,19 +103,35 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
-              <span className="text-primary-600 font-semibold text-sm uppercase tracking-wider">من نحن</span>
-              <h2 className="text-2xl sm:text-4xl font-bold text-primary-900 dark:text-gray-100 mt-2 mb-5">معهد مسجدي للعلوم الإسلامية</h2>
+              <span className="text-primary-600 font-semibold text-sm uppercase tracking-wider">
+                من نحن
+              </span>
+              <h2 className="text-2xl sm:text-4xl font-bold text-primary-900 dark:text-gray-100 mt-2 mb-5">
+                معهد مسجدي للعلوم الإسلامية
+              </h2>
               <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-lg mb-5">
-                مسجدي معهد تعليمي متخصص في تعليم الأطفال والطلاب القرآن الكريم بأحكام التجويد، والحديث النبوي الشريف، والفقه الإسلامي، والسيرة النبوية، وسائر العلوم الإسلامية.
+                مسجدي معهد تعليمي متخصص في تعليم الأطفال والطلاب القرآن الكريم
+                بأحكام التجويد، والحديث النبوي الشريف، والفقه الإسلامي، والسيرة
+                النبوية، وسائر العلوم الإسلامية.
               </p>
               <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6">
-                نحرص على بناء جيل متمسك بكتاب الله وسنة نبيه ﷺ، في بيئة تعليمية مشجعة ومنظمة تحت إشراف نخبة من المعلمين المتخصصين.
+                نحرص على بناء جيل متمسك بكتاب الله وسنة نبيه ﷺ، في بيئة تعليمية
+                مشجعة ومنظمة تحت إشراف نخبة من المعلمين المتخصصين.
               </p>
               <div className="grid grid-cols-3 gap-4">
-                {[['fas fa-quran','القرآن الكريم'],['fas fa-book','الحديث'],['fas fa-mosque','الفقه']].map(([icon, label]) => (
-                  <div key={label} className="text-center p-4 bg-white dark:bg-[#1a2d1e] rounded-xl shadow-sm dark:shadow-black/20 dark:border dark:border-primary-900/40">
+                {[
+                  ["fas fa-quran", "القرآن الكريم"],
+                  ["fas fa-book", "الحديث"],
+                  ["fas fa-mosque", "الفقه"],
+                ].map(([icon, label]) => (
+                  <div
+                    key={label}
+                    className="text-center p-4 bg-white dark:bg-[#1a2d1e] rounded-xl shadow-sm dark:shadow-black/20 dark:border dark:border-primary-900/40"
+                  >
                     <i className={`${icon} text-primary-600 text-2xl mb-2`}></i>
-                    <p className="text-sm font-semibold text-gray-700 dark:text-gray-200">{label}</p>
+                    <p className="text-sm font-semibold text-gray-700 dark:text-gray-200">
+                      {label}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -98,7 +143,11 @@ export default function HomePage() {
                 className="w-full h-auto block"
               />
               <div className="absolute inset-0 flex flex-col items-center justify-end pb-8 px-6">
-                <p className={`text-lg sm:text-2xl font-bold text-center ${dark ? 'text-gold-400' : 'text-primary-800'}`}>﴿ خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْآنَ وَعَلَّمَهُ ﴾</p>
+                <p
+                  className={`text-lg sm:text-2xl font-bold text-center text-primary-800`}
+                >
+                  ﴿ خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْآنَ وَعَلَّمَهُ ﴾
+                </p>
               </div>
             </div>
           </div>
@@ -109,47 +158,90 @@ export default function HomePage() {
       <section id="courses" className="py-16 dark:bg-[#0d1a10]">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-10">
-            <span className="text-primary-600 font-semibold text-sm">ما نقدمه</span>
-            <h2 className="text-2xl sm:text-4xl font-bold text-primary-900 dark:text-gray-100 mt-2">الدورات المتاحة</h2>
+            <span className="text-primary-600 font-semibold text-sm">
+              ما نقدمه
+            </span>
+            <h2 className="text-2xl sm:text-4xl font-bold text-primary-900 dark:text-gray-100 mt-2">
+              الدورات المتاحة
+            </h2>
             <div className="w-16 h-1 bg-gold-500 mx-auto mt-3"></div>
           </div>
           {(() => {
             const courseCards = [];
-            classes.forEach(cls => {
-              const courses = cls.courses && cls.courses.length > 0
-                ? cls.courses
-                : cls.courseName ? [{ name: cls.courseName, image: cls.courseImage || '' }] : [];
+            classes.forEach((cls) => {
+              const courses =
+                cls.courses && cls.courses.length > 0
+                  ? cls.courses
+                  : cls.courseName
+                    ? [{ name: cls.courseName, image: cls.courseImage || "" }]
+                    : [];
               if (courses.length === 0) {
-                courseCards.push({ key: cls._id, courseName: cls.name, courseImage: '', className: cls.name, teacherName: cls.teacher?.name, description: cls.description });
+                courseCards.push({
+                  key: cls._id,
+                  courseName: cls.name,
+                  courseImage: "",
+                  className: cls.name,
+                  teacherName: cls.teacher?.name,
+                  description: cls.description,
+                });
               } else {
                 courses.forEach((course, i) => {
-                  courseCards.push({ key: `${cls._id}-${i}`, courseName: course.name, courseImage: course.image || '', className: cls.name, teacherName: cls.teacher?.name, description: cls.description });
+                  courseCards.push({
+                    key: `${cls._id}-${i}`,
+                    courseName: course.name,
+                    courseImage: course.image || "",
+                    className: cls.name,
+                    teacherName: cls.teacher?.name,
+                    description: cls.description,
+                  });
                 });
               }
             });
-            if (courseCards.length === 0) return (
-              <div className="text-center py-12 text-gray-400 dark:text-gray-500">
-                <i className="fas fa-book-open text-5xl mb-3"></i>
-                <p>لم تتم إضافة دورات بعد</p>
-              </div>
-            );
+            if (courseCards.length === 0)
+              return (
+                <div className="text-center py-12 text-gray-400 dark:text-gray-500">
+                  <i className="fas fa-book-open text-5xl mb-3"></i>
+                  <p>لم تتم إضافة دورات بعد</p>
+                </div>
+              );
             return (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {courseCards.map(card => (
-                  <div key={card.key} className="bg-white dark:bg-[#1a2d1e] rounded-2xl shadow-md dark:shadow-black/30 overflow-hidden card-hover dark:border dark:border-primary-900/40">
+                {courseCards.map((card) => (
+                  <div
+                    key={card.key}
+                    className="bg-white dark:bg-[#1a2d1e] rounded-2xl shadow-md dark:shadow-black/30 overflow-hidden card-hover dark:border dark:border-primary-900/40"
+                  >
                     <div className="h-44 bg-gradient-to-br from-primary-600 to-primary-800 flex items-center justify-center">
                       {card.courseImage ? (
-                        <img src={card.courseImage} alt={card.courseName} className="w-full h-full object-cover" />
+                        <img
+                          src={card.courseImage}
+                          alt={card.courseName}
+                          className="w-full h-full object-cover"
+                        />
                       ) : (
                         <i className="fas fa-book-quran text-white text-6xl opacity-60"></i>
                       )}
                     </div>
                     <div className="p-5">
-                      <h3 className="font-bold text-xl text-primary-800 dark:text-gray-100 mb-2">{card.courseName}</h3>
-                      {card.description && <p className="text-gray-600 dark:text-gray-300 text-sm mb-3">{card.description}</p>}
+                      <h3 className="font-bold text-xl text-primary-800 dark:text-gray-100 mb-2">
+                        {card.courseName}
+                      </h3>
+                      {card.description && (
+                        <p className="text-gray-600 dark:text-gray-300 text-sm mb-3">
+                          {card.description}
+                        </p>
+                      )}
                       <div className="pt-3 mt-3 border-t border-gray-100 dark:border-primary-900/40 space-y-1">
-                        <p className="text-sm font-bold text-primary-700 dark:text-primary-300"><i className="fas fa-school ml-1"></i>الصف: {card.className}</p>
-                        {card.teacherName && <p className="text-xs text-gray-400 dark:text-gray-500"><i className="fas fa-user ml-1"></i>المعلم: {card.teacherName}</p>}
+                        <p className="text-sm font-bold text-primary-700 dark:text-primary-300">
+                          <i className="fas fa-school ml-1"></i>الصف:{" "}
+                          {card.className}
+                        </p>
+                        {card.teacherName && (
+                          <p className="text-xs text-gray-400 dark:text-gray-500">
+                            <i className="fas fa-user ml-1"></i>المعلم:{" "}
+                            {card.teacherName}
+                          </p>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -165,21 +257,42 @@ export default function HomePage() {
         <section className="py-16 bg-gray-50 dark:bg-[#111f14]">
           <div className="max-w-6xl mx-auto px-4">
             <div className="text-center mb-10">
-              <span className="text-primary-600 font-semibold text-sm">آخر الأخبار</span>
-              <h2 className="text-2xl sm:text-4xl font-bold text-primary-900 dark:text-gray-100 mt-2">الأخبار والإعلانات</h2>
+              <span className="text-primary-600 font-semibold text-sm">
+                آخر الأخبار
+              </span>
+              <h2 className="text-2xl sm:text-4xl font-bold text-primary-900 dark:text-gray-100 mt-2">
+                الأخبار والإعلانات
+              </h2>
               <div className="w-16 h-1 bg-gold-500 mx-auto mt-3"></div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {news.slice(0,6).map(item => (
-                <div key={item._id} className="bg-white dark:bg-[#1a2d1e] rounded-2xl shadow-md dark:shadow-black/30 p-6 card-hover dark:border dark:border-primary-900/40">
+              {news.slice(0, 6).map((item) => (
+                <div
+                  key={item._id}
+                  className="bg-white dark:bg-[#1a2d1e] rounded-2xl shadow-md dark:shadow-black/30 p-6 card-hover dark:border dark:border-primary-900/40"
+                >
                   <div className="flex items-center gap-2 mb-3">
-                    <span className={`text-xs px-3 py-1 rounded-full font-bold ${item.type === 'offer' ? 'bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-400' : item.type === 'announcement' ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400' : 'bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-400'}`}>
-                      {item.type === 'offer' ? 'عرض' : item.type === 'announcement' ? 'إعلان' : 'خبر'}
+                    <span
+                      className={`text-xs px-3 py-1 rounded-full font-bold ${item.type === "offer" ? "bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-400" : item.type === "announcement" ? "bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400" : "bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-400"}`}
+                    >
+                      {item.type === "offer"
+                        ? "عرض"
+                        : item.type === "announcement"
+                          ? "إعلان"
+                          : "خبر"}
                     </span>
-                    <span className="text-xs text-gray-400 dark:text-gray-500">{new Date(item.createdAt).toLocaleDateString('ar-SA')}</span>
+                    <span className="text-xs text-gray-400 dark:text-gray-500">
+                      {new Date(item.createdAt).toLocaleDateString("ar-SA")}
+                    </span>
                   </div>
-                  <h3 className="font-bold text-gray-800 dark:text-gray-100 text-lg mb-2">{item.title}</h3>
-                  {item.content && <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed line-clamp-3">{item.content}</p>}
+                  <h3 className="font-bold text-gray-800 dark:text-gray-100 text-lg mb-2">
+                    {item.title}
+                  </h3>
+                  {item.content && (
+                    <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed line-clamp-3">
+                      {item.content}
+                    </p>
+                  )}
                 </div>
               ))}
             </div>
@@ -192,8 +305,12 @@ export default function HomePage() {
         <section dir="rtl" className="dark:bg-[#0d1a10]">
           {/* Section header */}
           <div className="py-16 px-4 text-center">
-            <span className="text-primary-600 font-semibold text-sm">المناسبات</span>
-            <h2 className="text-2xl sm:text-4xl font-bold text-primary-900 dark:text-gray-100 mt-2">المناسبات الإسلامية</h2>
+            <span className="text-primary-600 font-semibold text-sm">
+              المناسبات
+            </span>
+            <h2 className="text-2xl sm:text-4xl font-bold text-primary-900 dark:text-gray-100 mt-2">
+              المناسبات الإسلامية
+            </h2>
             <div className="w-16 h-1 bg-gold-500 mx-auto mt-3"></div>
           </div>
 
@@ -203,7 +320,7 @@ export default function HomePage() {
               <div
                 key={occ._id}
                 className="relative w-full rounded-2xl overflow-hidden group bg-primary-50 dark:bg-primary-950 border border-primary-200 dark:border-primary-800/60 shadow-lg dark:shadow-primary-900/40"
-                style={{ minHeight: '320px' }}
+                style={{ minHeight: "320px" }}
               >
                 {/* Left gold accent */}
                 <div className="absolute top-6 bottom-6 left-0 w-1 bg-gradient-to-b from-transparent via-gold-500 to-transparent rounded-full z-20"></div>
@@ -218,14 +335,25 @@ export default function HomePage() {
                   </>
                 ) : (
                   <div className="absolute inset-0 bg-gradient-to-br from-primary-700 via-primary-800 to-primary-900">
-                    <div className="absolute inset-0"
-                      style={{backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(255,255,255,0.04) 0%, transparent 60%)'}}
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        backgroundImage:
+                          "radial-gradient(circle at 20% 50%, rgba(255,255,255,0.04) 0%, transparent 60%)",
+                      }}
                     ></div>
                   </div>
                 )}
 
-                <div className="absolute left-6 top-1/2 -translate-y-1/2 pointer-events-none select-none" style={{ opacity: 0.15 }}>
-                  <img src={dark ? logoDark : logoLight} alt="" className="h-24 w-auto object-contain" />
+                <div
+                  className="absolute left-6 top-1/2 -translate-y-1/2 pointer-events-none select-none"
+                  style={{ opacity: 0.15 }}
+                >
+                  <img
+                    src={dark ? logoDark : logoLight}
+                    alt=""
+                    className="h-24 w-auto object-contain"
+                  />
                 </div>
 
                 <div className="absolute top-6 bottom-6 right-0 w-1 bg-gradient-to-b from-transparent via-gold-500 to-transparent rounded-full"></div>
@@ -236,11 +364,17 @@ export default function HomePage() {
                       <i className="fas fa-star-and-crescent text-gold-400 text-xs"></i>
                       <span>مناسبة إسلامية</span>
                     </div>
-                    <h3 className="text-2xl sm:text-4xl md:text-5xl font-bold text-white mb-4 leading-tight" style={{textShadow: '0 2px 20px rgba(0,0,0,0.8)'}}>
+                    <h3
+                      className="text-2xl sm:text-4xl md:text-5xl font-bold text-white mb-4 leading-tight"
+                      style={{ textShadow: "0 2px 20px rgba(0,0,0,0.8)" }}
+                    >
                       {occ.title}
                     </h3>
                     {occ.description && (
-                      <p className="text-white/80 text-sm sm:text-base md:text-lg leading-relaxed border-r-4 border-gold-500 pr-4 max-w-md" style={{textShadow: '0 1px 8px rgba(0,0,0,0.9)'}}>
+                      <p
+                        className="text-white/80 text-sm sm:text-base md:text-lg leading-relaxed border-r-4 border-gold-500 pr-4 max-w-md"
+                        style={{ textShadow: "0 1px 8px rgba(0,0,0,0.9)" }}
+                      >
                         {occ.description}
                       </p>
                     )}
@@ -262,19 +396,36 @@ export default function HomePage() {
         <section className="py-16 bg-gradient-to-b from-gold-50 to-white dark:from-[#1a1500] dark:to-[#0d1a10]">
           <div className="max-w-6xl mx-auto px-4">
             <div className="text-center mb-10">
-              <span className="text-gold-600 font-semibold text-sm">المتميزون</span>
-              <h2 className="text-2xl sm:text-4xl font-bold text-primary-900 dark:text-gray-100 mt-2">لوحة الشرف</h2>
+              <span className="text-gold-600 font-semibold text-sm">
+                المتميزون
+              </span>
+              <h2 className="text-2xl sm:text-4xl font-bold text-primary-900 dark:text-gray-100 mt-2">
+                لوحة الشرف
+              </h2>
               <div className="w-16 h-1 bg-gold-500 mx-auto mt-3"></div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {honors.map(h => (
-                <div key={h._id} className="bg-white dark:bg-[#1a2d1e] border-2 border-gold-200 dark:border-gold-900/60 rounded-2xl p-6 text-center card-hover shadow-md dark:shadow-black/30">
+              {honors.map((h) => (
+                <div
+                  key={h._id}
+                  className="bg-white dark:bg-[#1a2d1e] border-2 border-gold-200 dark:border-gold-900/60 rounded-2xl p-6 text-center card-hover shadow-md dark:shadow-black/30"
+                >
                   <div className="w-16 h-16 bg-gold-100 dark:bg-gold-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                     <i className="fas fa-award text-gold-500 text-3xl"></i>
                   </div>
-                  <h3 className="font-bold text-xl text-primary-800 dark:text-gray-100 mb-1">{h.student?.name}</h3>
-                  {h.class?.name && <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">{h.class.name}</p>}
-                  {h.reason && <p className="text-gray-600 dark:text-gray-300 text-sm italic">"{h.reason}"</p>}
+                  <h3 className="font-bold text-xl text-primary-800 dark:text-gray-100 mb-1">
+                    {h.student?.name}
+                  </h3>
+                  {h.class?.name && (
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
+                      {h.class.name}
+                    </p>
+                  )}
+                  {h.reason && (
+                    <p className="text-gray-600 dark:text-gray-300 text-sm italic">
+                      "{h.reason}"
+                    </p>
+                  )}
                 </div>
               ))}
             </div>
@@ -287,10 +438,17 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
             <div>
-              <span className="text-primary-600 font-semibold text-sm">الحضور</span>
-              <h2 className="text-3xl font-bold text-primary-900 dark:text-gray-100 mt-1">آخر سجل حضور</h2>
+              <span className="text-primary-600 font-semibold text-sm">
+                الحضور
+              </span>
+              <h2 className="text-3xl font-bold text-primary-900 dark:text-gray-100 mt-1">
+                آخر سجل حضور
+              </h2>
             </div>
-            <Link to="/attendance" className="bg-primary-700 text-white px-6 py-2.5 rounded-xl font-semibold hover:bg-primary-800 transition-colors text-sm">
+            <Link
+              to="/attendance"
+              className="bg-primary-700 text-white px-6 py-2.5 rounded-xl font-semibold hover:bg-primary-800 transition-colors text-sm"
+            >
               <i className="fas fa-list ml-2"></i>
               عرض الكل
             </Link>
@@ -298,21 +456,43 @@ export default function HomePage() {
           {latestAttendance ? (
             <div className="bg-white dark:bg-[#1a2d1e] rounded-2xl shadow-md dark:shadow-black/30 overflow-hidden dark:border dark:border-primary-900/40">
               <div className="p-4 bg-primary-50 dark:bg-primary-900/40 border-b dark:border-primary-900/50 flex items-center justify-between">
-                <span className="font-bold text-primary-800 dark:text-gray-100">{latestAttendance.class?.name}</span>
-                <span className="text-sm text-gray-500 dark:text-gray-400">{new Date(latestAttendance.date).toLocaleDateString('ar-SA')}</span>
+                <span className="font-bold text-primary-800 dark:text-gray-100">
+                  {latestAttendance.class?.name}
+                </span>
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  {new Date(latestAttendance.date).toLocaleDateString("ar-SA")}
+                </span>
               </div>
               <div className="p-4 grid grid-cols-3 gap-4 text-center">
                 <div className="bg-green-50 dark:bg-green-900/20 rounded-xl p-4">
-                  <p className="text-3xl font-bold text-green-600 dark:text-green-400">{latestAttendance.records?.filter(r => r.status === 'present').length || 0}</p>
-                  <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">حاضر</p>
+                  <p className="text-3xl font-bold text-green-600 dark:text-green-400">
+                    {latestAttendance.records?.filter(
+                      (r) => r.status === "present",
+                    ).length || 0}
+                  </p>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
+                    حاضر
+                  </p>
                 </div>
                 <div className="bg-red-50 dark:bg-red-900/20 rounded-xl p-4">
-                  <p className="text-3xl font-bold text-red-600 dark:text-red-400">{latestAttendance.records?.filter(r => r.status === 'absent').length || 0}</p>
-                  <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">غائب</p>
+                  <p className="text-3xl font-bold text-red-600 dark:text-red-400">
+                    {latestAttendance.records?.filter(
+                      (r) => r.status === "absent",
+                    ).length || 0}
+                  </p>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
+                    غائب
+                  </p>
                 </div>
                 <div className="bg-yellow-50 dark:bg-yellow-900/20 rounded-xl p-4">
-                  <p className="text-3xl font-bold text-yellow-600 dark:text-yellow-400">{latestAttendance.records?.filter(r => r.status === 'excused').length || 0}</p>
-                  <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">معذور</p>
+                  <p className="text-3xl font-bold text-yellow-600 dark:text-yellow-400">
+                    {latestAttendance.records?.filter(
+                      (r) => r.status === "excused",
+                    ).length || 0}
+                  </p>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
+                    معذور
+                  </p>
                 </div>
               </div>
             </div>
@@ -330,23 +510,39 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto px-4">
           <div className="bg-primary-800 dark:bg-primary-950 dark:border dark:border-primary-800/60 rounded-3xl p-6 sm:p-10 text-white text-center">
             <h2 className="text-2xl sm:text-4xl font-bold mb-3">تواصل معنا</h2>
-            <p className="text-primary-200 mb-8">نسعد بالرد على استفساراتكم وتسجيل أبنائكم</p>
+            <p className="text-primary-200 mb-8">
+              نسعد بالرد على استفساراتكم وتسجيل أبنائكم
+            </p>
             <div className="flex flex-wrap justify-center gap-6 mb-8">
               {contact.whatsapp && (
-                <a href={`https://wa.me/${contact.whatsapp?.replace(/\D/g,'')}`} target="_blank" rel="noreferrer"
-                  className="flex items-center gap-3 bg-green-600 hover:bg-green-700 px-6 py-3 rounded-xl transition-colors">
+                <a
+                  href={`https://wa.me/${contact.whatsapp?.replace(/\D/g, "")}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-3 bg-green-600 hover:bg-green-700 px-6 py-3 rounded-xl transition-colors"
+                >
                   <i className="fab fa-whatsapp text-xl"></i>
-                  <span className="font-semibold" dir="ltr">{contact.whatsapp}</span>
+                  <span className="font-semibold" dir="ltr">
+                    {contact.whatsapp}
+                  </span>
                 </a>
               )}
               {contact.phone && (
-                <a href={`tel:${contact.phone}`} className="flex items-center gap-3 bg-white/20 hover:bg-white/30 px-6 py-3 rounded-xl transition-colors">
+                <a
+                  href={`tel:${contact.phone}`}
+                  className="flex items-center gap-3 bg-white/20 hover:bg-white/30 px-6 py-3 rounded-xl transition-colors"
+                >
                   <i className="fas fa-phone text-xl"></i>
-                  <span className="font-semibold" dir="ltr">{contact.phone}</span>
+                  <span className="font-semibold" dir="ltr">
+                    {contact.phone}
+                  </span>
                 </a>
               )}
             </div>
-            <Link to="/contact" className="inline-block bg-gold-500 hover:bg-gold-600 text-white px-8 py-3 rounded-xl font-bold transition-colors">
+            <Link
+              to="/contact"
+              className="inline-block bg-gold-500 hover:bg-gold-600 text-white px-8 py-3 rounded-xl font-bold transition-colors"
+            >
               <i className="fas fa-map-marker-alt ml-2"></i>
               صفحة التواصل الكاملة
             </Link>
