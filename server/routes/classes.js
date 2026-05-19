@@ -3,6 +3,7 @@ const router = express.Router();
 const Class = require('../models/Class');
 const User = require('../models/User');
 const Student = require('../models/Student');
+const Lesson = require('../models/Lesson');
 const { authMiddleware, adminOnly } = require('../middleware/auth');
 
 router.get('/', async (req, res) => {
@@ -62,6 +63,7 @@ router.delete('/:id', authMiddleware, adminOnly, async (req, res) => {
     if (cls?.teacher) {
       await User.findByIdAndUpdate(cls.teacher, { $pull: { assignedClasses: cls._id } });
     }
+    await Lesson.deleteMany({ class: req.params.id });
     await Class.findByIdAndDelete(req.params.id);
     res.json({ message: 'Deleted' });
   } catch (err) { res.status(500).json({ message: err.message }); }
