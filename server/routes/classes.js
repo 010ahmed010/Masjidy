@@ -7,7 +7,10 @@ const { authMiddleware, adminOnly } = require('../middleware/auth');
 
 router.get('/', async (req, res) => {
   try {
-    const classes = await Class.find().populate('teacher', 'name email');
+    const { teacherId } = req.query;
+    const filter = {};
+    if (teacherId) filter.teacher = teacherId;
+    const classes = await Class.find(filter).populate('teacher', 'name email');
     const result = await Promise.all(classes.map(async (cls) => {
       const students = await Student.find({ assignedClass: cls._id }, 'name _id');
       const obj = cls.toObject();

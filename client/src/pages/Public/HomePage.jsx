@@ -521,23 +521,41 @@ export default function HomePage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8" dir="rtl">
               {lessons.map(lesson => (
-                <div key={lesson._id} className="bg-gray-50 dark:bg-[#1a2d1e] rounded-2xl overflow-hidden shadow-sm dark:shadow-black/20 border border-gray-100 dark:border-primary-900/40">
-                  <div className="px-5 py-3 bg-gradient-to-l from-primary-700 to-primary-900 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <i className="fas fa-chalkboard-teacher text-white/80 text-sm"></i>
-                      <span className="font-bold text-white text-sm">{lesson.teacher?.name}</span>
+                <div key={lesson._id} className="bg-white dark:bg-[#1a2d1e] rounded-2xl overflow-hidden shadow-md dark:shadow-black/20 border border-gray-100 dark:border-primary-900/40">
+                  {/* Card header */}
+                  <div className="px-5 py-3 bg-gradient-to-l from-primary-700 to-primary-900 flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+                        <i className="fas fa-chalkboard-teacher text-white text-xs"></i>
+                      </div>
+                      <div className="min-w-0">
+                        <p className="font-bold text-white text-sm truncate">{lesson.teacher?.name}</p>
+                        <p className="text-primary-200 text-xs truncate">{lesson.class?.name}</p>
+                      </div>
                     </div>
-                    <span className="text-xs bg-white/20 text-white px-2.5 py-1 rounded-full">{lesson.class?.name}</span>
+                    <div className="flex-shrink-0 text-left">
+                      <p className="text-xs text-primary-300 leading-tight">آخر تحديث</p>
+                      <p className="text-xs text-white/80">
+                        {lesson.updatedAt ? new Date(lesson.updatedAt).toLocaleDateString('ar-SA', { month: 'short', day: 'numeric' }) : ''}
+                      </p>
+                    </div>
                   </div>
+                  {/* Days preview */}
                   <div className="p-4 space-y-2">
                     {lesson.days?.filter(d => d.topic || d.course).slice(0, 3).map((d, i) => (
                       <div key={i} className="flex items-center gap-3">
-                        <span className="text-xs bg-primary-50 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 px-2 py-0.5 rounded font-semibold w-16 text-center flex-shrink-0">{d.day}</span>
-                        <span className="text-xs text-gray-600 dark:text-gray-300 truncate">{d.course && <span className="text-gold-600 dark:text-gold-400 font-semibold ml-1">{d.course} — </span>}{d.topic}</span>
+                        <span className="text-xs bg-primary-50 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 px-2 py-0.5 rounded font-bold w-14 text-center flex-shrink-0">{d.day}</span>
+                        <span className="text-xs text-gray-600 dark:text-gray-300 truncate">
+                          {d.course && <span className="text-gold-600 dark:text-gold-400 font-semibold">{d.course} — </span>}
+                          {d.topic}
+                        </span>
                       </div>
                     ))}
                     {(lesson.days?.filter(d => d.topic || d.course).length || 0) === 0 && (
-                      <p className="text-xs text-gray-400 dark:text-gray-500 text-center py-2">لا توجد تفاصيل</p>
+                      <p className="text-xs text-gray-400 dark:text-gray-500 text-center py-1">لا توجد تفاصيل مدخلة بعد</p>
+                    )}
+                    {(lesson.days?.filter(d => d.topic || d.course).length || 0) > 3 && (
+                      <p className="text-xs text-primary-500 dark:text-primary-400 font-semibold">+{lesson.days.filter(d => d.topic || d.course).length - 3} أيام أخرى...</p>
                     )}
                   </div>
                 </div>
