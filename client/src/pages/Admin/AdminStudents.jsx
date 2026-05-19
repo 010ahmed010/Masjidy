@@ -4,28 +4,25 @@ import axios from 'axios';
 export default function AdminStudents() {
   const [students, setStudents] = useState([]);
   const [classes, setClasses] = useState([]);
-  const [teachers, setTeachers] = useState([]);
   const [search, setSearch] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editing, setEditing] = useState(null);
-  const [form, setForm] = useState({ name: '', age: '', phone: '', whatsapp: '', guardianName: '', guardianPhone: '', assignedClass: '', assignedTeacher: '', status: 'active' });
+  const [form, setForm] = useState({ name: '', age: '', whatsapp: '', guardianName: '', guardianPhone: '', assignedClass: '', status: 'active' });
   const [loading, setLoading] = useState(false);
 
   useEffect(() => { fetchAll(); }, []);
 
   const fetchAll = async () => {
-    const [s, c, t] = await Promise.allSettled([
+    const [s, c] = await Promise.allSettled([
       axios.get('/api/students'),
       axios.get('/api/classes'),
-      axios.get('/api/teachers'),
     ]);
     setStudents(s.value?.data || []);
     setClasses(c.value?.data || []);
-    setTeachers(t.value?.data || []);
   };
 
-  const openAdd = () => { setEditing(null); setForm({ name: '', age: '', phone: '', whatsapp: '', guardianName: '', guardianPhone: '', assignedClass: '', assignedTeacher: '', status: 'active' }); setShowModal(true); };
-  const openEdit = (s) => { setEditing(s); setForm({ name: s.name, age: s.age || '', phone: s.phone || '', whatsapp: s.whatsapp || '', guardianName: s.guardianName || '', guardianPhone: s.guardianPhone || '', assignedClass: s.assignedClass?._id || '', assignedTeacher: s.assignedTeacher?._id || '', status: s.status }); setShowModal(true); };
+  const openAdd = () => { setEditing(null); setForm({ name: '', age: '', whatsapp: '', guardianName: '', guardianPhone: '', assignedClass: '', status: 'active' }); setShowModal(true); };
+  const openEdit = (s) => { setEditing(s); setForm({ name: s.name, age: s.age || '', whatsapp: s.whatsapp || '', guardianName: s.guardianName || '', guardianPhone: s.guardianPhone || '', assignedClass: s.assignedClass?._id || '', status: s.status }); setShowModal(true); };
 
   const handleSubmit = async (e) => {
     e.preventDefault(); setLoading(true);
@@ -131,7 +128,7 @@ export default function AdminStudents() {
               <button onClick={() => setShowModal(false)} className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"><i className="fas fa-times text-xl"></i></button>
             </div>
             <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4">
-              {[['name','الاسم الكامل','text',true],['age','العمر','number',false],['phone','رقم الهاتف','text',false],['whatsapp','رقم الواتساب','text',false],['guardianName','اسم ولي الأمر','text',false],['guardianPhone','هاتف ولي الأمر','text',false]].map(([k,l,t,req]) => (
+              {[['name','الاسم الكامل','text',true],['age','العمر','number',false],['guardianName','اسم ولي الأمر','text',false],['guardianPhone','هاتف ولي الأمر','text',false],['whatsapp','واتساب ولي الأمر','text',false]].map(([k,l,t,req]) => (
                 <div key={k}>
                   <label className={labelCls}>{l}</label>
                   <input type={t} required={req} value={form[k]} onChange={e => setForm({...form,[k]:e.target.value})} className={inputCls} />
@@ -142,13 +139,6 @@ export default function AdminStudents() {
                 <select value={form.assignedClass} onChange={e => setForm({...form, assignedClass: e.target.value})} className={inputCls}>
                   <option value="">-- اختر الفصل --</option>
                   {classes.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
-                </select>
-              </div>
-              <div>
-                <label className={labelCls}>المعلم</label>
-                <select value={form.assignedTeacher} onChange={e => setForm({...form, assignedTeacher: e.target.value})} className={inputCls}>
-                  <option value="">-- اختر المعلم --</option>
-                  {teachers.map(t => <option key={t._id} value={t._id}>{t.name}</option>)}
                 </select>
               </div>
               <div>
