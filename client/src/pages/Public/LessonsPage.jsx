@@ -3,11 +3,13 @@ import axios from 'axios';
 import Header from '../../components/shared/Header';
 import Footer from '../../components/shared/Footer';
 
-const DAYS = ['السبت', 'الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'];
+const PAGE_SIZE = 5;
 
 export default function LessonsPage() {
   const [lessons, setLessons] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     axios.get('/api/lessons/public')
@@ -19,6 +21,24 @@ export default function LessonsPage() {
   const formatDate = (d) => {
     if (!d) return '';
     return new Date(d).toLocaleDateString('ar-SA', { year: 'numeric', month: 'long', day: 'numeric' });
+  };
+
+  const filtered = lessons.filter(l => {
+    const q = search.trim().toLowerCase();
+    if (!q) return true;
+    return (
+      l.teacher?.name?.toLowerCase().includes(q) ||
+      l.class?.name?.toLowerCase().includes(q)
+    );
+  });
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const paginated = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+
+  const handleSearch = (e) => {
+    setSearch(e.target.value);
+    setPage(1);
   };
 
   return (
@@ -45,61 +65,126 @@ export default function LessonsPage() {
               <i className="fas fa-circle-notch fa-spin text-4xl mb-3"></i>
               <p>جاري تحميل الخطط...</p>
             </div>
-          ) : lessons.length === 0 ? (
-            <div className="text-center py-20 text-gray-400 dark:text-gray-500 bg-white dark:bg-[#1a2d1e] rounded-2xl shadow-sm dark:border dark:border-primary-900/40">
-              <i className="fas fa-calendar-times text-5xl mb-4"></i>
-              <p className="font-semibold text-lg mb-1">لا توجد خطط دروس بعد</p>
-              <p className="text-sm">لم يقم أي معلم بإضافة خطة دروس لصفه بعد</p>
-            </div>
           ) : (
-            <div className="space-y-6">
-              {lessons.map(lesson => (
-                <div key={lesson._id} className="bg-white dark:bg-[#1a2d1e] rounded-2xl shadow-md dark:shadow-black/30 overflow-hidden dark:border dark:border-primary-900/40">
-                  {/* Card header */}
-                  <div className="px-6 py-4 bg-gradient-to-l from-primary-700 to-primary-900 flex items-center justify-between flex-wrap gap-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
-                        <i className="fas fa-chalkboard-teacher text-white"></i>
-                      </div>
-                      <div>
-                        <p className="font-bold text-white">{lesson.teacher?.name || 'معلم'}</p>
-                        <p className="text-primary-200 text-xs">{lesson.class?.name || 'الصف'}</p>
-                      </div>
-                    </div>
-                    <div className="text-left">
-                      <p className="text-xs text-primary-300 mb-0.5">آخر تحديث</p>
-                      <p className="text-xs bg-white/20 text-white px-3 py-1 rounded-full font-medium">
-                        {formatDate(lesson.updatedAt)}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Days */}
-                  <div className="divide-y dark:divide-primary-900/40">
-                    {lesson.days?.filter(d => d.topic || d.course || d.time).length > 0
-                      ? lesson.days.filter(d => d.topic || d.course || d.time).map((d, i) => (
-                        <div key={i} className="px-6 py-4 flex items-start gap-4 flex-wrap hover:bg-gray-50 dark:hover:bg-primary-900/10 transition-colors">
-                          <div className="w-24 flex-shrink-0">
-                            <span className="inline-block bg-primary-50 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 text-xs font-bold px-2.5 py-1 rounded-lg">{d.day}</span>
-                            {d.time && <p className="text-xs text-gray-400 dark:text-gray-500 mt-1 text-center" dir="ltr">{d.time}</p>}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            {d.course && <p className="text-xs text-gold-600 dark:text-gold-400 font-semibold mb-0.5">{d.course}</p>}
-                            {d.topic && <p className="font-semibold text-gray-800 dark:text-gray-100 text-sm mb-0.5">{d.topic}</p>}
-                            {d.description && <p className="text-xs text-gray-500 dark:text-gray-400">{d.description}</p>}
-                          </div>
-                        </div>
-                      ))
-                      : (
-                        <div className="px-6 py-4 text-center text-gray-400 dark:text-gray-500 text-sm">
-                          لا توجد تفاصيل مدخلة لهذه الخطة
-                        </div>
-                      )
-                    }
+            <>
+              {/* Search */}
+              {lessons.length > 0 && (
+                <div className="mb-6">
+                  <div className="relative max-w-md">
+                    <i className="fas fa-search absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 text-sm"></i>
+                    <input
+                      type="text"
+                      value={search}
+                      onChange={handleSearch}
+                      placeholder="ابحث باسم المعلم أو الصف..."
+                      className="w-full pr-9 pl-4 py-2.5 rounded-xl border border-gray-200 dark:border-primary-800 bg-white dark:bg-[#1a2d1e] text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    />
                   </div>
                 </div>
-              ))}
-            </div>
+              )}
+
+              {filtered.length === 0 ? (
+                <div className="text-center py-20 text-gray-400 dark:text-gray-500 bg-white dark:bg-[#1a2d1e] rounded-2xl shadow-sm dark:border dark:border-primary-900/40">
+                  <i className="fas fa-calendar-times text-5xl mb-4"></i>
+                  <p className="font-semibold text-lg mb-1">
+                    {search ? 'لا توجد نتائج مطابقة' : 'لا توجد خطط دروس بعد'}
+                  </p>
+                  <p className="text-sm">
+                    {search ? 'جرب البحث بكلمة مختلفة' : 'لم يقم أي معلم بإضافة خطة دروس لصفه بعد'}
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <div className="space-y-6">
+                    {paginated.map(lesson => (
+                      <div key={lesson._id} className="bg-white dark:bg-[#1a2d1e] rounded-2xl shadow-md dark:shadow-black/30 overflow-hidden dark:border dark:border-primary-900/40">
+                        {/* Card header */}
+                        <div className="px-6 py-4 bg-gradient-to-l from-primary-700 to-primary-900 flex items-center justify-between flex-wrap gap-3">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+                              <i className="fas fa-chalkboard-teacher text-white"></i>
+                            </div>
+                            <div>
+                              <p className="font-bold text-white">{lesson.teacher?.name || 'معلم'}</p>
+                              <p className="text-primary-200 text-xs">{lesson.class?.name || 'الصف'}</p>
+                            </div>
+                          </div>
+                          <div className="text-left">
+                            <p className="text-xs text-primary-300 mb-0.5">آخر تحديث</p>
+                            <p className="text-xs bg-white/20 text-white px-3 py-1 rounded-full font-medium">
+                              {formatDate(lesson.updatedAt)}
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Days */}
+                        <div className="divide-y dark:divide-primary-900/40">
+                          {lesson.days?.filter(d => d.topic || d.course || d.time).length > 0
+                            ? lesson.days.filter(d => d.topic || d.course || d.time).map((d, i) => (
+                              <div key={i} className="px-6 py-4 flex items-start gap-4 flex-wrap hover:bg-gray-50 dark:hover:bg-primary-900/10 transition-colors">
+                                <div className="w-24 flex-shrink-0">
+                                  <span className="inline-block bg-primary-50 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 text-xs font-bold px-2.5 py-1 rounded-lg">{d.day}</span>
+                                  {d.time && <p className="text-xs text-gray-400 dark:text-gray-500 mt-1 text-center" dir="ltr">{d.time}</p>}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  {d.course && <p className="text-xs text-gold-600 dark:text-gold-400 font-semibold mb-0.5">{d.course}</p>}
+                                  {d.topic && <p className="font-semibold text-gray-800 dark:text-gray-100 text-sm mb-0.5">{d.topic}</p>}
+                                  {d.description && <p className="text-xs text-gray-500 dark:text-gray-400">{d.description}</p>}
+                                </div>
+                              </div>
+                            ))
+                            : (
+                              <div className="px-6 py-4 text-center text-gray-400 dark:text-gray-500 text-sm">
+                                لا توجد تفاصيل مدخلة لهذه الخطة
+                              </div>
+                            )
+                          }
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Pagination */}
+                  {totalPages > 1 && (
+                    <div className="flex items-center justify-center gap-2 mt-8">
+                      <button
+                        onClick={() => setPage(p => Math.max(1, p - 1))}
+                        disabled={currentPage === 1}
+                        className="px-4 py-2 rounded-lg text-sm font-semibold border border-gray-200 dark:border-primary-800 bg-white dark:bg-[#1a2d1e] text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-primary-900/30 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                      >
+                        <i className="fas fa-chevron-right ml-1"></i>
+                        السابق
+                      </button>
+
+                      <div className="flex items-center gap-1">
+                        {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
+                          <button
+                            key={p}
+                            onClick={() => setPage(p)}
+                            className={`w-9 h-9 rounded-lg text-sm font-bold transition-colors ${p === currentPage ? 'bg-primary-700 text-white' : 'bg-white dark:bg-[#1a2d1e] text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-primary-800 hover:bg-gray-50 dark:hover:bg-primary-900/30'}`}
+                          >
+                            {p}
+                          </button>
+                        ))}
+                      </div>
+
+                      <button
+                        onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                        disabled={currentPage === totalPages}
+                        className="px-4 py-2 rounded-lg text-sm font-semibold border border-gray-200 dark:border-primary-800 bg-white dark:bg-[#1a2d1e] text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-primary-900/30 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                      >
+                        التالي
+                        <i className="fas fa-chevron-left mr-1"></i>
+                      </button>
+                    </div>
+                  )}
+
+                  <p className="text-center text-xs text-gray-400 dark:text-gray-500 mt-3">
+                    عرض {(currentPage - 1) * PAGE_SIZE + 1}–{Math.min(currentPage * PAGE_SIZE, filtered.length)} من {filtered.length} خطة
+                  </p>
+                </>
+              )}
+            </>
           )}
         </div>
       </main>

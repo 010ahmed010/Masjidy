@@ -11,7 +11,11 @@ export default function AdminClasses() {
   const [form, setForm] = useState({ name: '', courses: [{ ...emptyCourse }], description: '', teacher: '', showOnHomePage: true });
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => { fetchAll(); }, []);
+  useEffect(() => {
+    fetchAll();
+    window.addEventListener('focus', fetchAll);
+    return () => window.removeEventListener('focus', fetchAll);
+  }, []);
   const fetchAll = async () => {
     const [c, t] = await Promise.allSettled([axios.get('/api/classes'), axios.get('/api/teachers')]);
     setClasses(c.value?.data || []); setTeachers(t.value?.data || []);
@@ -68,7 +72,10 @@ export default function AdminClasses() {
     <div>
       <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
         <h1 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100"><i className="fas fa-school text-primary-600 dark:text-primary-400 ml-2"></i>إدارة الصفوف والدورات</h1>
-        <button onClick={openAdd} className="bg-primary-700 text-white px-5 py-2.5 rounded-xl font-semibold hover:bg-primary-800 text-sm"><i className="fas fa-plus ml-1"></i>إضافة صف</button>
+        <div className="flex gap-2">
+          <button onClick={fetchAll} className="bg-gray-100 dark:bg-primary-900/40 text-gray-600 dark:text-gray-300 px-3 py-2.5 rounded-xl font-semibold hover:bg-gray-200 dark:hover:bg-primary-800/50 text-sm" title="تحديث البيانات"><i className="fas fa-sync-alt"></i></button>
+          <button onClick={openAdd} className="bg-primary-700 text-white px-5 py-2.5 rounded-xl font-semibold hover:bg-primary-800 text-sm"><i className="fas fa-plus ml-1"></i>إضافة صف</button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
