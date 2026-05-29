@@ -9,6 +9,7 @@ export default function AdminSettings() {
   const [pwForm, setPwForm] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
   const [pwLoading, setPwLoading] = useState(false);
   const [pwMsg, setPwMsg] = useState(null);
+  const [showPw, setShowPw] = useState({ currentPassword: false, newPassword: false, confirmPassword: false });
 
   useEffect(() => { axios.get('/api/settings').then(r => setForm(r.data)).catch(() => {}); }, []);
 
@@ -99,36 +100,32 @@ export default function AdminSettings() {
           <div className="bg-white dark:bg-[#1a2d1e] rounded-2xl shadow-md dark:shadow-black/30 p-6 space-y-4 dark:border dark:border-primary-900/40">
             <h2 className="font-bold text-gray-700 dark:text-gray-200 text-lg border-b dark:border-primary-900/40 pb-2"><i className="fas fa-lock text-primary-600 dark:text-primary-400 ml-2"></i>تغيير كلمة مرور المدير</h2>
 
-            <div>
-              <label className={labelCls}>كلمة المرور الحالية</label>
-              <input
-                type="password"
-                value={pwForm.currentPassword}
-                onChange={e => setPwForm({...pwForm, currentPassword: e.target.value})}
-                className={inputCls}
-                placeholder="أدخل كلمة المرور الحالية"
-              />
-            </div>
-            <div>
-              <label className={labelCls}>كلمة المرور الجديدة</label>
-              <input
-                type="password"
-                value={pwForm.newPassword}
-                onChange={e => setPwForm({...pwForm, newPassword: e.target.value})}
-                className={inputCls}
-                placeholder="أدخل كلمة المرور الجديدة"
-              />
-            </div>
-            <div>
-              <label className={labelCls}>تأكيد كلمة المرور الجديدة</label>
-              <input
-                type="password"
-                value={pwForm.confirmPassword}
-                onChange={e => setPwForm({...pwForm, confirmPassword: e.target.value})}
-                className={inputCls}
-                placeholder="أعد إدخال كلمة المرور الجديدة"
-              />
-            </div>
+            {[
+              { key: 'currentPassword', label: 'كلمة المرور الحالية', placeholder: 'أدخل كلمة المرور الحالية' },
+              { key: 'newPassword', label: 'كلمة المرور الجديدة', placeholder: 'أدخل كلمة المرور الجديدة' },
+              { key: 'confirmPassword', label: 'تأكيد كلمة المرور الجديدة', placeholder: 'أعد إدخال كلمة المرور الجديدة' },
+            ].map(({ key, label, placeholder }) => (
+              <div key={key}>
+                <label className={labelCls}>{label}</label>
+                <div className="relative">
+                  <input
+                    type={showPw[key] ? 'text' : 'password'}
+                    value={pwForm[key]}
+                    onChange={e => setPwForm({...pwForm, [key]: e.target.value})}
+                    className={inputCls + ' pl-10'}
+                    placeholder={placeholder}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPw(s => ({...s, [key]: !s[key]}))}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                    tabIndex={-1}
+                  >
+                    <i className={`fas ${showPw[key] ? 'fa-eye-slash' : 'fa-eye'} text-sm`}></i>
+                  </button>
+                </div>
+              </div>
+            ))}
 
             {pwMsg && (
               <div className={`rounded-xl p-3 text-sm font-semibold ${pwMsg.type === 'success' ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400' : 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400'}`}>
