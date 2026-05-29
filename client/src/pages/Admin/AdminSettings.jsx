@@ -6,12 +6,38 @@ export default function AdminSettings() {
   const [loading, setLoading] = useState(false);
   const [saved, setSaved] = useState(false);
 
+  const [pwForm, setPwForm] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
+  const [pwLoading, setPwLoading] = useState(false);
+  const [pwMsg, setPwMsg] = useState(null);
+
   useEffect(() => { axios.get('/api/settings').then(r => setForm(r.data)).catch(() => {}); }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault(); setLoading(true);
     await axios.put('/api/settings', form).catch(() => {});
     setSaved(true); setTimeout(() => setSaved(false), 3000); setLoading(false);
+  };
+
+  const handlePasswordChange = async (e) => {
+    e.preventDefault();
+    setPwMsg(null);
+    if (pwForm.newPassword !== pwForm.confirmPassword) {
+      setPwMsg({ type: 'error', text: 'كلمة المرور الجديدة وتأكيدها غير متطابقتين' });
+      return;
+    }
+    setPwLoading(true);
+    try {
+      const token = localStorage.getItem('token');
+      const res = await axios.put('/api/auth/change-password', {
+        currentPassword: pwForm.currentPassword,
+        newPassword: pwForm.newPassword
+      }, { headers: { Authorization: `Bearer ${token}` } });
+      setPwMsg({ type: 'success', text: res.data.message });
+      setPwForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
+    } catch (err) {
+      setPwMsg({ type: 'error', text: err.response?.data?.message || 'حدث خطأ، يرجى المحاولة مجدداً' });
+    }
+    setPwLoading(false);
   };
 
   const inputCls = "w-full border border-gray-300 dark:border-primary-800 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm bg-white dark:bg-[#0d1a10] text-gray-800 dark:text-gray-100";
@@ -66,6 +92,54 @@ export default function AdminSettings() {
 
           <button type="submit" disabled={loading} className="w-full bg-primary-700 text-white px-8 py-3 rounded-xl font-bold hover:bg-primary-800 disabled:opacity-60">
             {loading ? <><i className="fas fa-spinner fa-spin ml-2"></i>جاري الحفظ...</> : <><i className="fas fa-save ml-2"></i>حفظ الإعدادات</>}
+          </button>
+        </form>
+
+        <form onSubmit={handlePasswordChange} className="mt-6 space-y-4">
+          <div className="bg-white dark:bg-[#1a2d1e] rounded-2xl shadow-md dark:shadow-black/30 p-6 space-y-4 dark:border dark:border-primary-900/40">
+            <h2 className="font-bold text-gray-700 dark:text-gray-200 text-lg border-b dark:border-primary-900/40 pb-2"><i className="fas fa-lock text-primary-600 dark:text-primary-400 ml-2"></i>تغيير كلمة مرور المدير</h2>
+
+            <div>
+              <label className={labelCls}>كلمة المرور الحالية</label>
+              <input
+                type="password"
+                value={pwForm.currentPassword}
+                onChange={e => setPwForm({...pwForm, currentPassword: e.target.value})}
+                className={inputCls}
+                placeholder="أدخل كلمة المرور الحالية"
+              />
+            </div>
+            <div>
+              <label className={labelCls}>كلمة المرور الجديدة</label>
+              <input
+                type="password"
+                value={pwForm.newPassword}
+                onChange={e => setPwForm({...pwForm, newPassword: e.target.value})}
+                className={inputCls}
+                placeholder="أدخل كلمة المرور الجديدة"
+              />
+            </div>
+            <div>
+              <label className={labelCls}>تأكيد كلمة المرور الجديدة</label>
+              <input
+                type="password"
+                value={pwForm.confirmPassword}
+                onChange={e => setPwForm({...pwForm, confirmPassword: e.target.value})}
+                className={inputCls}
+                placeholder="أعد إدخال كلمة المرور الجديدة"
+              />
+            </div>
+
+            {pwMsg && (
+              <div className={`rounded-xl p-3 text-sm font-semibold ${pwMsg.type === 'success' ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400' : 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400'}`}>
+                <i className={`fas ${pwMsg.type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} ml-2`}></i>
+                {pwMsg.text}
+              </div>
+            )}
+          </div>
+
+          <button type="submit" disabled={pwLoading} className="w-full bg-red-700 hover:bg-red-800 text-white px-8 py-3 rounded-xl font-bold disabled:opacity-60">
+            {pwLoading ? <><i className="fas fa-spinner fa-spin ml-2"></i>جاري التغيير...</> : <><i className="fas fa-key ml-2"></i>تغيير كلمة المرور</>}
           </button>
         </form>
     </div>

@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const path = require('path');
 
 const app = express();
 
@@ -61,9 +62,34 @@ if (!MONGO_URI) {
   process.exit(1);
 }
 
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../client/dist')));
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api') || req.path.startsWith('/uploads')) return next();
+    res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+  });
+}
+
+async function seedAdmin() {
+  const User = require('./models/User');
+  const existing = await User.findOne({ username: 'admin' });
+  if (!existing) {
+    const admin = new User({
+      name: 'المدير',
+      username: 'admin',
+      email: 'admin@masjidy.com',
+      password: process.env.ADMIN_PASSWORD || 'admin',
+      role: 'admin'
+    });
+    await admin.save();
+    console.log('Admin account created — username: admin, password:', process.env.ADMIN_PASSWORD || 'admin');
+  }
+}
+
 mongoose.connect(MONGO_URI, { serverSelectionTimeoutMS: 15000 })
-  .then(() => {
+  .then(async () => {
     console.log('Connected to MongoDB');
+    await seedAdmin();
     app.listen(PORT, '0.0.0.0', () => {
       console.log(`Server running on port ${PORT}`);
     });

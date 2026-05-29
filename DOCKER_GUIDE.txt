@@ -1,0 +1,147 @@
+مسجدي - Masjidy Docker Deployment Guide
+=========================================
+
+REQUIREMENTS
+------------
+- Docker installed on your VPS
+- A MongoDB Atlas connection string (Atlas must whitelist your server IP or use 0.0.0.0/0)
+- A strong JWT secret key (generate it once and save it safely)
+
+
+GENERATE YOUR JWT SECRET (do this once)
+----------------------------------------
+Run this command on any machine that has Node.js:
+
+    node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
+
+Copy the output and save it in a safe place (password manager, etc.).
+You MUST use this same value every time you run or restart the container.
+
+
+BUILD THE DOCKER IMAGE
+-----------------------
+Upload your project files to the VPS, then run:
+
+    docker build -t masjidy:v1.0 .
+
+To rebuild after code changes:
+
+    docker build --no-cache -t masjidy:v1.0 .
+
+
+RECOMMENDED: USE AN ENV FILE (more secure than inline flags)
+-------------------------------------------------------------
+Create a file at /etc/masjidy.env on your server (readable only by root):
+
+    MONGO_URI=your_mongodb_connection_string
+    JWT_SECRET=your_saved_jwt_secret
+    ADMIN_PASSWORD=your_admin_password
+    NODE_ENV=production
+    PORT=8000
+
+Secure the file:
+
+    chmod 600 /etc/masjidy.env
+
+
+RUN THE CONTAINER
+------------------
+Using env file (recommended):
+
+    docker run -d \
+      --restart unless-stopped \
+      --env-file /etc/masjidy.env \
+      -p 80:8000 \
+      --name masjidy \
+      masjidy:v1.0
+
+Using inline flags (quick testing only — secrets are visible in process list):
+
+    docker run -d \
+      --restart unless-stopped \
+      -p 80:8000 \
+      -e MONGO_URI=your_mongodb_connection_string \
+      -e JWT_SECRET=your_saved_jwt_secret \
+      -e ADMIN_PASSWORD=your_admin_password \
+      --name masjidy \
+      masjidy:v1.0
+
+NOTE: --restart unless-stopped means the container automatically restarts
+if it crashes or the server reboots. Always include this flag in production.
+
+
+DEFAULT ADMIN LOGIN
+--------------------
+Username : admin
+Password : the value you set for ADMIN_PASSWORD
+           (defaults to "admin" if not set)
+
+On first startup the admin account is created automatically.
+You can change the password later from the Settings page inside the admin dashboard.
+
+
+IMPORTANT - JWT SECRET RULE
+-----------------------------
+The JWT secret is used to sign and verify user login tokens.
+
+- Every time you restart or redeploy the container, you MUST use
+  the exact same JWT_SECRET value.
+
+- If you use a different secret after restart, all currently logged-in
+  users will be logged out and must log in again.
+
+- If you forget to pass JWT_SECRET, the server will refuse to start.
+  This is intentional for security.
+
+
+IMPORTANT - MONGODB CONNECTION
+--------------------------------
+- If the MongoDB Atlas connection fails at startup, the server will exit
+  immediately with an error. This prevents silent data loss.
+
+- Make sure your Atlas cluster has your VPS IP address whitelisted,
+  or use 0.0.0.0/0 (allow all) for simplicity.
+
+
+ENVIRONMENT VARIABLES SUMMARY
+-------------------------------
+MONGO_URI        - (required) Your MongoDB Atlas connection string
+JWT_SECRET       - (required) Your saved JWT secret key — never change this
+ADMIN_PASSWORD   - (optional) Admin account password, default: admin
+PORT             - (optional) Internal server port, default: 8000
+NODE_ENV         - Set automatically to "production" by the Dockerfile
+
+
+USEFUL DOCKER COMMANDS
+-----------------------
+View live logs:
+    docker logs -f masjidy
+
+View last 100 lines of logs:
+    docker logs --tail 100 masjidy
+
+Stop the container:
+    docker stop masjidy
+
+Start a stopped container (preserves env variables):
+    docker start masjidy
+
+Remove the container (to run a fresh one):
+    docker rm -f masjidy
+
+Check if the container is running:
+    docker ps
+
+Check resource usage:
+    docker stats masjidy
+
+
+UPGRADING TO A NEW VERSION
+----------------------------
+1. Upload the updated project files to the VPS.
+2. Build the new image:
+       docker build --no-cache -t masjidy:v1.1 .
+3. Stop and remove the old container:
+       docker rm -f masjidy
+4. Start the new container (same env file, new image tag):
+       docker run -d --restart unless-stopped --env-file /etc/masjidy.env -p 80:8000 --name masjidy masjidy:v1.1
