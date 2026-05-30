@@ -30,10 +30,18 @@ export default function Header() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const navLinks = [
+  const primaryLinks = [
     { to: '/', label: 'الرئيسية' },
     { to: '/attendance', label: 'الغياب والحضور' },
     { to: '/contact', label: 'تواصل معنا' },
+  ];
+
+  const secondaryLinks = [
+    { id: 'courses', label: 'الدورات المتاحة', icon: 'fa-graduation-cap' },
+    { id: 'news', label: 'الأخبار والإعلانات', icon: 'fa-newspaper' },
+    { id: 'occasions', label: 'المناسبات الإسلامية', icon: 'fa-star-and-crescent' },
+    { id: 'honor', label: 'لوحة الشرف', icon: 'fa-award' },
+    { id: 'lessons', label: 'خطة الدروس الأسبوعية', icon: 'fa-calendar-week' },
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -44,8 +52,24 @@ export default function Header() {
     navigate('/');
   };
 
+  const scrollToSection = (id) => {
+    setMenuOpen(false);
+    if (location.pathname === '/') {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      navigate('/');
+      setTimeout(() => {
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 300);
+    }
+  };
+
   return (
     <header className="bg-white dark:bg-[#0d1a10] shadow-md dark:shadow-primary-900/30 dark:border-b dark:border-primary-900/50 sticky top-0 z-50 transition-colors duration-300">
+
+      {/* ── Row 1: primary navigation ── */}
       <div className="max-w-7xl mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
 
@@ -58,7 +82,7 @@ export default function Header() {
           </Link>
 
           <nav className="hidden md:flex items-center gap-6">
-            {navLinks.map(link => (
+            {primaryLinks.map(link => (
               <Link
                 key={link.to}
                 to={link.to}
@@ -72,7 +96,6 @@ export default function Header() {
           </nav>
 
           <div className="hidden md:flex items-center gap-3">
-            {/* Dark mode toggle */}
             <button
               onClick={toggleDark}
               title={dark ? 'الوضع النهاري' : 'الوضع الليلي'}
@@ -148,14 +171,56 @@ export default function Header() {
             </button>
           </div>
         </div>
+      </div>
 
-        {menuOpen && (
-          <div className="md:hidden mt-3 pb-3 border-t dark:border-primary-900 pt-3 flex flex-col gap-3">
-            {navLinks.map(link => (
-              <Link key={link.to} to={link.to} className="text-gray-700 dark:text-gray-300 font-semibold hover:text-primary-700 dark:hover:text-primary-400" onClick={() => setMenuOpen(false)}>
-                {link.label}
-              </Link>
-            ))}
+      {/* ── Row 2: secondary scroll links (desktop only) ── */}
+      <div className="hidden md:block border-t border-gray-100 dark:border-primary-900/50 bg-gray-50 dark:bg-[#0a1509]">
+        <div className="max-w-7xl mx-auto px-4 py-1.5 flex items-center justify-center gap-1">
+          {secondaryLinks.map(link => (
+            <button
+              key={link.id}
+              onClick={() => scrollToSection(link.id)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-500 dark:text-gray-400 hover:text-primary-700 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/40 transition-colors"
+            >
+              <i className={`fas ${link.icon} text-primary-500 dark:text-primary-500 text-[10px]`}></i>
+              {link.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Mobile menu ── */}
+      {menuOpen && (
+        <div className="md:hidden px-4 pb-4 pt-3 border-t dark:border-primary-900 flex flex-col gap-2">
+          <p className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1">التنقل</p>
+          {primaryLinks.map(link => (
+            <Link
+              key={link.to}
+              to={link.to}
+              className="text-gray-700 dark:text-gray-300 font-semibold hover:text-primary-700 dark:hover:text-primary-400 py-1"
+              onClick={() => setMenuOpen(false)}
+            >
+              {link.label}
+            </Link>
+          ))}
+
+          <div className="border-t dark:border-primary-900 mt-2 pt-3">
+            <p className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">أقسام الصفحة الرئيسية</p>
+            <div className="grid grid-cols-2 gap-2">
+              {secondaryLinks.map(link => (
+                <button
+                  key={link.id}
+                  onClick={() => scrollToSection(link.id)}
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-primary-900/30 hover:bg-primary-50 dark:hover:bg-primary-900/50 hover:text-primary-700 dark:hover:text-primary-400 transition-colors text-right"
+                >
+                  <i className={`fas ${link.icon} text-primary-500 text-xs`}></i>
+                  {link.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="border-t dark:border-primary-900 mt-2 pt-3 flex flex-col gap-2">
             {user ? (
               <>
                 <div className="flex items-center gap-2 px-2 py-1 bg-primary-50 dark:bg-primary-900/40 rounded-lg">
@@ -189,8 +254,8 @@ export default function Header() {
               </Link>
             )}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </header>
   );
 }

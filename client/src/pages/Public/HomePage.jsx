@@ -265,7 +265,7 @@ export default function HomePage() {
 
       {/* News */}
       {news.length > 0 && (
-        <section className="py-16 bg-gray-50 dark:bg-[#111f14]">
+        <section id="news" className="py-16 bg-gray-50 dark:bg-[#111f14]">
           <div className="max-w-6xl mx-auto px-4">
             <div className="text-center mb-10">
               <span className="text-primary-600 font-semibold text-sm">
@@ -313,7 +313,7 @@ export default function HomePage() {
 
       {/* Occasions */}
       {occasions.length > 0 && (
-        <section dir="rtl" className="dark:bg-[#0d1a10]">
+        <section id="occasions" dir="rtl" className="dark:bg-[#0d1a10]">
           {/* Section header */}
           <div className="py-16 px-4 text-center">
             <span className="text-primary-600 font-semibold text-sm">
@@ -404,7 +404,7 @@ export default function HomePage() {
 
       {/* Honor */}
       {honors.length > 0 && (
-        <section className="py-20 bg-[#0a1205] dark:bg-[#070e08] relative overflow-hidden">
+        <section id="honor" className="py-20 bg-[#0a1205] dark:bg-[#070e08] relative overflow-hidden">
           {/* Decorative background glow */}
           <div className="absolute inset-0 pointer-events-none">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-gold-500/5 blur-3xl"></div>
@@ -536,7 +536,7 @@ export default function HomePage() {
 
       {/* Lessons Section */}
       {lessons.length > 0 && (
-        <section className="py-16 bg-white dark:bg-[#0d1a10]">
+        <section id="lessons" className="py-16 bg-white dark:bg-[#0d1a10]">
           <div className="max-w-6xl mx-auto px-4">
             <div className="text-center mb-10" dir="rtl">
               <span className="text-primary-600 dark:text-primary-400 font-semibold text-sm">المناهج الدراسية</span>
